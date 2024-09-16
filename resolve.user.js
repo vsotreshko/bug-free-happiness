@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name        Blum resolve
+// @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
 // @version     1.0

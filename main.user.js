@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         Blum Autoclicker
+// @name         Blum Autoclicker fix
 // @version      2.2
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
