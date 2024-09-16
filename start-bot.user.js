@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     1.0
+// @version     1.1
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -16,7 +16,7 @@ const launchBlum = async (window) => {
   if (window.location.href.startsWith("https://web.telegram.org/")) {
     window.location.href = "https://web.telegram.org/k/#@BlumCryptoBot";
 
-    const launchBotButton = await Promise.race([
+    const launchBotButton = await Promise.any([
       waitForElement(document, "button.reply-markup-button"),
       waitForElement(document, "div.new-message-bot-commands.is-view"),
     ]);
@@ -32,7 +32,7 @@ const launchBlum = async (window) => {
 
 const waitForElement = async (document, selector) => {
   console.warn(`Waiting for: ${selector}`);
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
     if (document.querySelector(selector)) {
       console.warn(`waitForElement: found ${selector} immediately`);
       return resolve(document.querySelector(selector));
@@ -54,7 +54,7 @@ const waitForElement = async (document, selector) => {
     setTimeout(() => {
       console.warn(`waitForElement: ${selector} not found after 10 seconds`);
       observer.disconnect();
-      resolve(null);
+      reject(null);
     }, 10000);
   });
 };
