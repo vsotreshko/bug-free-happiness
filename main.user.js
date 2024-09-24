@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      2.3
+// @version      2.4
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -16,7 +16,7 @@ let GAME_SETTINGS = {
   flowerSkipPercentage: Math.floor(Math.random() * 6) + 5,
   minDelayMs: 2000,
   maxDelayMs: 5000,
-  autoClickPlay: false,
+  autoClickPlay: true,
 };
 
 let isGamePaused = false;
@@ -541,10 +541,10 @@ try {
   function loadSettings() {
     const savedSettings = localStorage.getItem("BlumAutoclickerSettings");
     if (savedSettings) {
-      const parsedSettings = JSON.parse(savedSettings);
+      // const parsedSettings = JSON.parse(savedSettings);
       GAME_SETTINGS = {
         ...GAME_SETTINGS,
-        ...parsedSettings,
+        // ...parsedSettings,
       };
     }
   }
