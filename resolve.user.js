@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     1.2
+// @version     1.3
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        https://telegram.blum.codes/*
@@ -50,11 +50,15 @@ window.addEventListener(
       claimButton.click();
     }
 
+    await delay(1000);
+
     const frensTab = await waitForElement(document, 'a[href*="/frens"]');
     if (frensTab) {
       await delay(1000);
       frensTab.click();
     }
+
+    await delay(1000);
 
     const frensClaim = await waitForElement(document, "button.claim-button");
     if (frensClaim) {
@@ -62,17 +66,23 @@ window.addEventListener(
       frensClaim.click();
     }
 
+    await delay(1000);
+
     const homeTab = await waitForElement(document, 'a[href*="/"]');
     if (homeTab) {
       await delay(1000);
       homeTab.click();
     }
 
+    await delay(1000);
+
     const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
     if (startFarming) {
       await delay(1000);
       startFarming.click();
     }
+
+    await delay(1000);
 
     const playGameButton = await waitForElement(document, "a.play-btn");
     if (playGameButton) {
