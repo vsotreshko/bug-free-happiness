@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     1.1
+// @version     1.2
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        https://telegram.blum.codes/*
@@ -44,10 +44,10 @@ const waitForElement = async (document, selector) => {
 window.addEventListener(
   "load",
   async function () {
-    const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
-    if (startFarming) {
+    const claimButton = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
+    if (claimButton) {
       await delay(1000);
-      startFarming.click();
+      claimButton.click();
     }
 
     const frensTab = await waitForElement(document, 'a[href*="/frens"]');
@@ -66,6 +66,12 @@ window.addEventListener(
     if (homeTab) {
       await delay(1000);
       homeTab.click();
+    }
+
+    const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
+    if (startFarming) {
+      await delay(1000);
+      startFarming.click();
     }
 
     const playGameButton = await waitForElement(document, "a.play-btn");
