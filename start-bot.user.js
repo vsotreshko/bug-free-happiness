@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     1.3
+// @version     2.0
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -10,7 +10,43 @@
 // @updateURL   https://github.com/vsotreshko/bug-free-happiness/raw/main/start-bot.user.js
 // ==/UserScript==
 
+/** Custom functions -------------------------------------------------------------- */
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const waitForElement = async (document, selector) => {
+  console.warn(`Waiting for: ${selector}`);
+  return new Promise((resolve, reject) => {
+    if (document.querySelector(selector)) {
+      console.warn(`waitForElement: found ${selector} immediately`);
+      return resolve(document.querySelector(selector));
+    }
+
+    const observer = new MutationObserver((mutations) => {
+      if (document.querySelector(selector)) {
+        console.warn(`waitForElement: found ${selector} after DOM changed`);
+        resolve(document.querySelector(selector));
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    // Resolve promise after 10 seconds if element is not found
+    setTimeout(() => {
+      console.warn(`waitForElement: ${selector} not found after 10 seconds`);
+      observer.disconnect();
+      reject(null);
+    }, 10000);
+  });
+};
 
 const launchBlum = async (window) => {
   window.location.href = "https://web.telegram.org/k/#@BlumCryptoBot";
@@ -46,35 +82,6 @@ const launchNotPixel = async (window) => {
   }
 };
 
-const waitForElement = async (document, selector) => {
-  console.warn(`Waiting for: ${selector}`);
-  return new Promise((resolve, reject) => {
-    if (document.querySelector(selector)) {
-      console.warn(`waitForElement: found ${selector} immediately`);
-      return resolve(document.querySelector(selector));
-    }
-
-    const observer = new MutationObserver((mutations) => {
-      if (document.querySelector(selector)) {
-        console.warn(`waitForElement: found ${selector} after DOM changed`);
-        resolve(document.querySelector(selector));
-        observer.disconnect();
-      }
-    });
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    // Resolve promise after 10 seconds if element is not found
-    setTimeout(() => {
-      console.warn(`waitForElement: ${selector} not found after 10 seconds`);
-      observer.disconnect();
-      reject(null);
-    }, 10000);
-  });
-};
-
 async function clickBrowserHeaderButton(document) {
   const browserHeaderButton = await waitForElement(document, '[class*="_BrowserHeaderButton"]');
   if (browserHeaderButton) {
@@ -83,6 +90,7 @@ async function clickBrowserHeaderButton(document) {
     console.warn("Browser header element not found");
   }
 }
+/** ------------------------------------------------------------------------------- */
 
 const init = async () => {
   await delay(5000); // Wait for window to load

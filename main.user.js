@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      2.4
+// @version      3.0
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -10,10 +10,49 @@
 // @updateURL    https://github.com/vsotreshko/bug-free-happiness/raw/main/main.user.js
 // ==/UserScript==
 
+/** Custom functions -------------------------------------------------------------- */
+const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
+const waitForElement = async (document, selector) => {
+  console.warn(`Waiting for: ${selector}`);
+  return new Promise((resolve) => {
+    if (document.querySelector(selector)) {
+      console.warn(`waitForElement: found ${selector} immediately`);
+      return resolve(document.querySelector(selector));
+    }
+
+    const observer = new MutationObserver((mutations) => {
+      if (document.querySelector(selector)) {
+        console.warn(`waitForElement: found ${selector} after DOM changed`);
+        resolve(document.querySelector(selector));
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    // Resolve promise after 10 seconds if element is not found
+    setTimeout(() => {
+      console.warn(`waitForElement: ${selector} not found after 10 seconds`);
+      observer.disconnect();
+      resolve(null);
+    }, 10000);
+  });
+};
+/** ------------------------------------------------------------------------------- */
+
 let GAME_SETTINGS = {
   minBombHits: 0,
   minIceHits: 10,
-  flowerSkipPercentage: Math.floor(Math.random() * 6) + 5,
+  flowerSkipPercentage: getRandomInt(5, 9),
   minDelayMs: 2000,
   maxDelayMs: 5000,
   autoClickPlay: true,
@@ -147,7 +186,7 @@ try {
     observer.observe(appElement, { childList: true, subtree: true });
   }
 
-  continuousPlayButtonCheck();
+  // continuousPlayButtonCheck();
 
   const settingsMenu = document.createElement("div");
   settingsMenu.className = "settings-menu";
@@ -549,8 +588,8 @@ try {
     }
   }
 
-  loadSettings();
-  updateSettingsMenu();
+  // loadSettings();
+  // updateSettingsMenu();
 
   function toggleGamePause() {
     isGamePaused = !isGamePaused;
@@ -560,3 +599,58 @@ try {
 } catch (e) {
   console.error("Blum Autoclicker error:", e);
 }
+
+/** Custom code ------------------------------------------------------------------- */
+const init = async () => {
+  // Claim / Continue / Start
+  const claimButton = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
+  if (claimButton) {
+    await delay(getRandomInt(3000, 5000));
+    claimButton.click();
+  }
+
+  await delay(getRandomInt(3000, 5000));
+
+  // Open Frens tab
+  const frensTab = await waitForElement(document, 'a[href*="/frens"]');
+  if (frensTab) {
+    await delay(getRandomInt(3000, 5000)); // Wait page for load
+    frensTab.click();
+  }
+
+  await delay(getRandomInt(3000, 5000)); // Wait after click
+
+  // Claim frens
+  const frensClaim = await waitForElement(document, "button.claim-button");
+  if (frensClaim) {
+    await delay(getRandomInt(3000, 5000));
+    frensClaim.click();
+  }
+
+  await delay(getRandomInt(3000, 5000)); // Wait after click
+
+  // Open Home tab
+  const homeTab = await waitForElement(document, 'a[href*="/"]');
+  if (homeTab) {
+    await delay(getRandomInt(3000, 5000));
+    homeTab.click();
+  }
+
+  await delay(getRandomInt(3000, 5000)); // Wait after click
+
+  // Claim / Continue / Start
+  const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
+  if (startFarming) {
+    await delay(1000);
+    startFarming.click();
+  }
+
+  await delay(getRandomInt(3000, 5000)); // Wait after click
+
+  loadSettings();
+  updateSettingsMenu();
+  continuousPlayButtonCheck();
+};
+
+init();
+/** ------------------------------------------------------------------------------- */
