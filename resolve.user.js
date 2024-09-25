@@ -2,10 +2,10 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.0
+// @version     2.1
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
-// @match        https://telegram.blum.codes/*
+// @match        *://*notpx.app/*
 // @downloadURL  https://github.com/vsotreshko/bug-free-happiness/raw/main/resolve.user.js
 // @updateURL    https://github.com/vsotreshko/bug-free-happiness/raw/main/resolve.user.js
 // ==/UserScript==
