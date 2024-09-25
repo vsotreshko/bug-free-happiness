@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     1.2
+// @version     1.3
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -84,18 +84,19 @@ async function clickBrowserHeaderButton(document) {
   }
 }
 
-window.addEventListener(
-  "load",
-  async function () {
+const init = async () => {
+  await delay(5000); // Wait for window to load
+
+  const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
+
+  if (hasNotPixel) {
     await launchNotPixel(window);
-
-    await delay(60000); // Wait 1 min to play
-
+    await delay(5 * 60 * 1000); // Wait 5 min to play
     await clickBrowserHeaderButton(document); // Close NotPixel
-
     await delay(5000); // Wait window to close
+  }
 
-    await launchBlum(window); // Start Blum
-  },
-  false
-);
+  await launchBlum(window); // Start Blum
+};
+
+init();
