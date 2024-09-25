@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     1.1
+// @version     1.2
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -13,20 +13,36 @@
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
 const launchBlum = async (window) => {
-  if (window.location.href.startsWith("https://web.telegram.org/")) {
-    window.location.href = "https://web.telegram.org/k/#@BlumCryptoBot";
+  window.location.href = "https://web.telegram.org/k/#@BlumCryptoBot";
+  await delay(5000);
 
-    const launchBotButton = await Promise.any([
-      waitForElement(document, "button.reply-markup-button"),
-      waitForElement(document, "div.new-message-bot-commands.is-view"),
-    ]);
+  const launchBotButton = await Promise.any([
+    waitForElement(document, "button.reply-markup-button"),
+    waitForElement(document, "div.new-message-bot-commands.is-view"),
+  ]);
 
-    if (launchBotButton) {
-      await delay(1000);
-      launchBotButton.click();
-    } else {
-      window.location.reload();
-    }
+  if (launchBotButton) {
+    await delay(1000);
+    launchBotButton.click();
+  } else {
+    window.location.reload();
+  }
+};
+
+const launchNotPixel = async (window) => {
+  window.location.href = "https://web.telegram.org/k/#@notpixel";
+  await delay(5000);
+
+  const launchBotButton = await Promise.any([
+    waitForElement(document, "button.reply-markup-button"),
+    waitForElement(document, "div.new-message-bot-commands.is-view"),
+  ]);
+
+  if (launchBotButton) {
+    await delay(1000);
+    launchBotButton.click();
+  } else {
+    window.location.reload();
   }
 };
 
@@ -59,10 +75,27 @@ const waitForElement = async (document, selector) => {
   });
 };
 
+async function clickBrowserHeaderButton(document) {
+  const browserHeaderButton = await waitForElement(document, '[class*="_BrowserHeaderButton"]');
+  if (browserHeaderButton) {
+    browserHeaderButton.click();
+  } else {
+    console.warn("Browser header element not found");
+  }
+}
+
 window.addEventListener(
   "load",
   async function () {
-    await launchBlum(window);
+    await launchNotPixel(window);
+
+    await delay(60000); // Wait 1 min to play
+
+    await clickBrowserHeaderButton(document); // Close NotPixel
+
+    await delay(5000); // Wait window to close
+
+    await launchBlum(window); // Start Blum
   },
   false
 );
