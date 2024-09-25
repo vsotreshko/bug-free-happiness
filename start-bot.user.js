@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.0
+// @version     2.1
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -43,7 +43,7 @@ const waitForElement = async (document, selector) => {
     setTimeout(() => {
       console.warn(`waitForElement: ${selector} not found after 10 seconds`);
       observer.disconnect();
-      reject(null);
+      resolve(null);
     }, 10000);
   });
 };
