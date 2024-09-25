@@ -296,158 +296,158 @@ try {
 
   const style = document.createElement("style");
   style.textContent = `
-    .settings-menu {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(40, 44, 52, 0.95);
-      border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
-      color: #abb2bf;
-      font-family: 'Arial', sans-serif;
-      z-index: 10000;
-      padding: 20px;
-      width: 300px;
-    }
-    .settings-title {
-      color: #61afef;
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .settings-close-button {
-      background: none;
-      border: none;
-      color: #e06c75;
-      font-size: 20px;
-      cursor: pointer;
-      padding: 0;
-    }
-    .setting-item {
-      margin-bottom: 12px;
-    }
-    .setting-label {
-      display: flex;
-      align-items: center;
-      margin-bottom: 4px;
-    }
-    .setting-label-text {
-      color: #e5c07b;
-      margin-right: 5px;
-    }
-    .help-icon {
-      cursor: help;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 14px;
-      height: 14px;
-      border-radius: 50%;
-      background-color: #61afef;
-      color: #282c34;
-      font-size: 10px;
-      font-weight: bold;
-    }
-    .setting-input {
-      display: flex;
-      align-items: center;
-    }
-    .setting-slider {
-      flex-grow: 1;
-      margin-right: 8px;
-    }
-    .setting-value {
-      min-width: 30px;
-      text-align: right;
-      font-size: 11px;
-    }
-    .tooltip {
-      position: relative;
-    }
-    .tooltip .tooltiptext {
-      visibility: hidden;
-      width: 200px;
-      background-color: #4b5263;
-      color: #fff;
-      text-align: center;
-      border-radius: 6px;
-      padding: 5px;
-      position: absolute;
-      z-index: 1;
-      bottom: 125%;
-      left: 50%;
-      margin-left: -100px;
-      opacity: 0;
-      transition: opacity 0.3s;
-      font-size: 11px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .tooltip:hover .tooltiptext {
-      visibility: visible;
-      opacity: 1;
-    }
-    .pause-resume-btn {
-      display: block;
-      width: calc(100% - 10px);
-      padding: 8px;
-      margin: 15px 5px;
-      background-color: #98c379;
-      color: #282c34;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-weight: bold;
-      font-size: 14px;
-      transition: background-color 0.3s;
-    }
-    .pause-resume-btn:hover {
-      background-color: #7cb668;
-    }
-    .social-buttons {
-      margin-top: 15px;
-      display: flex;
-      justify-content: space-between;
-      white-space: nowrap;
-    }
-    .social-button {
-      display: inline-flex;
-      align-items: center;
-      padding: 5px 8px;
-      border-radius: 4px;
-      background-color: #282c34;
-      color: #abb2bf;
-      text-decoration: none;
-      font-size: 12px;
-      transition: background-color 0.3s;
-    }
-    .social-button:hover {
-      background-color: #4b5263;
-    }
-    .social-button img {
-      width: 16px;
-      height: 16px;
-      margin-right: 5px;
-    }
-    .settings-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background-color: rgba(36, 146, 255, 0.8);
-      color: #fff;
-      border: none;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      font-size: 18px;
-      cursor: pointer;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-      z-index: 9999;
-    }
-  `;
+  .settings-menu {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(40, 44, 52, 0.95);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    color: #abb2bf;
+    font-family: 'Arial', sans-serif;
+    z-index: 10000;
+    padding: 20px;
+    width: 300px;
+  }
+  .settings-title {
+    color: #61afef;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .settings-close-button {
+    background: none;
+    border: none;
+    color: #e06c75;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+  }
+  .setting-item {
+    margin-bottom: 12px;
+  }
+  .setting-label {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
+  }
+  .setting-label-text {
+    color: #e5c07b;
+    margin-right: 5px;
+  }
+  .help-icon {
+    cursor: help;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background-color: #61afef;
+    color: #282c34;
+    font-size: 10px;
+    font-weight: bold;
+  }
+  .setting-input {
+    display: flex;
+    align-items: center;
+  }
+  .setting-slider {
+    flex-grow: 1;
+    margin-right: 8px;
+  }
+  .setting-value {
+    min-width: 30px;
+    text-align: right;
+    font-size: 11px;
+  }
+  .tooltip {
+    position: relative;
+  }
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 200px;
+    background-color: #4b5263;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -100px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 11px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+  }
+  .pause-resume-btn {
+    display: block;
+    width: calc(100% - 10px);
+    padding: 8px;
+    margin: 15px 5px;
+    background-color: #98c379;
+    color: #282c34;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  .pause-resume-btn:hover {
+    background-color: #7cb668;
+  }
+  .social-buttons {
+    margin-top: 15px;
+    display: flex;
+    justify-content: space-between;
+    white-space: nowrap;
+  }
+  .social-button {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 8px;
+    border-radius: 4px;
+    background-color: #282c34;
+    color: #abb2bf;
+    text-decoration: none;
+    font-size: 12px;
+    transition: background-color 0.3s;
+  }
+  .social-button:hover {
+    background-color: #4b5263;
+  }
+  .social-button img {
+    width: 16px;
+    height: 16px;
+    margin-right: 5px;
+  }
+  .settings-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(36, 146, 255, 0.8);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+  }
+`;
   document.head.appendChild(style);
 
   function createSettingElement(label, id, type, min, max, step, tooltipText) {
