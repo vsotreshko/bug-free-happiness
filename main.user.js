@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      3.0
+// @version      3.1
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -601,7 +601,109 @@ try {
 }
 
 /** Custom code ------------------------------------------------------------------- */
+const iterateOverTaskItems = async (taskItems, action) => {
+  const verifyWithCodes = [
+    { title: "$2.5m+ dogs airdrop", code: "HAPPYDOGS" },
+    { title: "liquidity pools guide", code: "Blumersss" },
+    { title: "what are amms?", code: "CRYPTOSMART" },
+    { title: "say no to rug pull!", code: "SUPERBLUM" },
+    { title: "what are telegram mini apps?", code: "CRYPTOBLUM" },
+    { title: "navigating crypto", code: "HEYBLUM" },
+    { title: "secure your crypto!", code: "BEST PROJECT EVER" },
+    { title: "forks explained", code: "GO GET" },
+    { title: "how to analyze crypto?", code: "VALUE" },
+  ];
+
+  if (action === "start" || action === "claim") {
+    for (const taskItem of taskItems) {
+      // Find and click the div with text "Start" inside the task item
+      const startDiv = taskItem.querySelector("div.label");
+      if (startDiv && startDiv.textContent.trim().toLowerCase() === action) {
+        startDiv.scrollIntoView();
+        startDiv.click();
+        await delay(getRandomInt(2000, 3000)); // Wait for potential action to complete
+      }
+    }
+  }
+
+  if (action === "verify") {
+    for (const taskItem of taskItems) {
+      const startDiv = taskItem.querySelector("div.label");
+
+      if (startDiv && startDiv.textContent.trim().toLowerCase() === "verify") {
+        const title = taskItem.querySelector("div.title");
+        const taskTitle = title?.textContent.trim().toLowerCase();
+
+        const verifyWithCode = verifyWithCodes.find((code) => code.title === taskTitle);
+
+        if (verifyWithCode) {
+          startDiv.scrollIntoView();
+          startDiv.click();
+          const verifyPage = await waitForElement(document, "div.pages-tasks-verify");
+
+          if (verifyPage) {
+            const verifyPageTitle = await waitForElement(
+              verifyPage,
+              "div.pages-tasks-verify > div.heading > div.title"
+            );
+            if (verifyPage && verifyPageTitle.textContent.trim().toLowerCase() === verifyWithCode.title) {
+              const input = await waitForElement(verifyPage, "input[type=text]");
+
+              await delay(getRandomInt(1000, 2000));
+              input.value = verifyWithCode.code;
+              input.dispatchEvent(new Event("input", { bubbles: true }));
+              await delay(getRandomInt(1000, 2000));
+
+              const submitButton = await waitForElement(verifyPage, "button.kit-button.is-large");
+
+              if (submitButton) {
+                submitButton.click();
+                await delay(getRandomInt(2000, 3000));
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+};
+const resolveTasks = async (document) => {
+  // Open Tasks tab
+  const tasksTab = await waitForElement(document, 'a[href*="/tasks"]');
+  if (tasksTab) {
+    await delay(getRandomInt(3000, 5000)); // Wait page for load
+    tasksTab.click();
+  }
+
+  await delay(getRandomInt(3000, 5000)); // Wait page for load
+
+  const tabSelectors = [
+    "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(2) > span", // New
+    // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(3) > span", // OnChain
+    "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(4) > span", // Socials
+    "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(5) > span", // Academy
+  ];
+
+  for (const tabSelector of tabSelectors) {
+    const tab = document.querySelector(tabSelector);
+
+    tab.click();
+
+    await delay(getRandomInt(3000, 5000)); // Wait page for load
+
+    const taskItems = document.querySelectorAll(".pages-tasks-item"); // Get all task items
+
+    await iterateOverTaskItems(taskItems, "start"); // Start all
+
+    await iterateOverTaskItems(taskItems, "verify"); // Verify if needed
+
+    await iterateOverTaskItems(taskItems, "claim"); // Claim all
+  }
+};
+
 const init = async () => {
+  await resolveTasks(document);
+
   // Claim / Continue / Start
   const claimButton = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
   if (claimButton) {
