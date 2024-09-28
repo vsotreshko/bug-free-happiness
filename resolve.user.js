@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.2
+// @version     2.3
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -233,10 +233,10 @@ const GAME_SETTINGS = {
   minPauseDuration: 60000, // 1 минута
   maxPauseDuration: 180000, // 3 минуты
   pauseUntil: null, // По умолчанию пауза не установлена
-  autoClaimEnabled: false, // По умолчанию автозабор награды выключен
+  autoClaimEnabled: true, // По умолчанию автозабор награды выключен
   autoClaimMinDelay: 120000, // 2 минуты
   autoClaimMaxDelay: 600000, // 10 минут
-  autoChangeColorEnabled: false, // По умолчанию автосмена цвета выключена
+  autoChangeColorEnabled: true, // По умолчанию автосмена цвета выключена
   autoChangeColorMinDelay: 120000, // 2 минуты
   autoChangeColorMaxDelay: 600000, // 10 минут
 };
@@ -882,7 +882,7 @@ function saveSettings() {
 
 // Загрузка настроек
 function loadSettings() {
-  const savedSettings = localStorage.getItem("NotPixelAutoclickerSettings");
+  const savedSettings = null;
   if (savedSettings) {
     const parsedSettings = JSON.parse(savedSettings);
     Object.assign(GAME_SETTINGS, parsedSettings);
