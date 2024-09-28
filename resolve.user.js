@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.3
+// @version     2.4
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -235,7 +235,7 @@ const GAME_SETTINGS = {
   pauseUntil: null, // По умолчанию пауза не установлена
   autoClaimEnabled: true, // По умолчанию автозабор награды выключен
   autoClaimMinDelay: 120000, // 2 минуты
-  autoClaimMaxDelay: 600000, // 10 минут
+  autoClaimMaxDelay: 180000, // 3 минуты
   autoChangeColorEnabled: true, // По умолчанию автосмена цвета выключена
   autoChangeColorMinDelay: 120000, // 2 минуты
   autoChangeColorMaxDelay: 600000, // 10 минут
