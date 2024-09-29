@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      3.1
+// @version      3.2
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -47,6 +47,8 @@ const waitForElement = async (document, selector) => {
     }, 10000);
   });
 };
+
+let buttonChecks = 0;
 /** ------------------------------------------------------------------------------- */
 
 let GAME_SETTINGS = {
@@ -150,6 +152,7 @@ try {
   }
 
   function checkAndClickPlayButton() {
+    buttonChecks = buttonChecks + 1;
     const playButtons = document.querySelectorAll(
       'button.kit-button.is-large.is-primary, a.play-btn[href="/game"], button.kit-button.is-large.is-primary'
     );
@@ -162,6 +165,7 @@ try {
       ) {
         setTimeout(() => {
           button.click();
+          buttonChecks = 0;
           gameStats.isGameOver = false;
         }, getNewGameDelay());
       }
@@ -170,7 +174,14 @@ try {
 
   function continuousPlayButtonCheck() {
     checkAndClickPlayButton();
-    setTimeout(continuousPlayButtonCheck, 1000);
+
+    if (buttonChecks > 30) {
+      console.log("Looks like finished");
+    }
+
+    setTimeout(() => {
+      continuousPlayButtonCheck();
+    }, 1000);
   }
 
   const observer = new MutationObserver((mutations) => {
