@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      3.3
+// @version      3.4
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -49,20 +49,7 @@ const waitForElement = async (document, selector) => {
 };
 
 const closeCurrentBrowser = () => {
-  fetch("http://local.adspower.net:50325/api/v1/browser/local-active")
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      return response.json();
-    })
-    .then((data) => {
-      console.log(data);
-      // Process the data here
-    })
-    .catch((error) => {
-      console.error("There was a problem with the fetch operation:", error);
-    });
+  // TODO:
 };
 
 let buttonChecks = 0;
