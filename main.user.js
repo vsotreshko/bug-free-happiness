@@ -48,6 +48,23 @@ const waitForElement = async (document, selector) => {
   });
 };
 
+const closeCurrentBrowser = () => {
+  fetch("http://local.adspower.net:50325/api/v1/browser/local-active")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      return response.json();
+    })
+    .then((data) => {
+      console.log(data);
+      // Process the data here
+    })
+    .catch((error) => {
+      console.error("There was a problem with the fetch operation:", error);
+    });
+};
+
 let buttonChecks = 0;
 /** ------------------------------------------------------------------------------- */
 
@@ -176,7 +193,7 @@ try {
     checkAndClickPlayButton();
 
     if (buttonChecks > 30) {
-      console.log("Looks like finished");
+      closeCurrentBrowser();
     }
 
     setTimeout(() => {
