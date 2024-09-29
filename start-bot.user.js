@@ -70,7 +70,10 @@ const launchNotPixel = async (window) => {
   await delay(5000);
 
   const launchBotButton = await Promise.any([
-    waitForElement(document, "button.reply-markup-button"),
+    waitForElement(
+      document,
+      "#column-center > div > div > div.bubbles.has-groups.has-sticky-dates.scrolled-down > div.scrollable.scrollable-y > div.bubbles-inner.has-rights > section > div.bubbles-group.bubbles-group-last > div.bubble.with-reply-markup.hide-name.is-in.can-have-tail.is-group-last > div > div.reply-markup > div:nth-child(1) > a > div"
+    ),
     waitForElement(document, "div.new-message-bot-commands.is-view"),
   ]);
 
