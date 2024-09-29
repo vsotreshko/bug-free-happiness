@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.2
+// @version     2.3
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -102,7 +102,7 @@ const init = async () => {
 
   if (hasNotPixel) {
     await launchNotPixel(window);
-    await delay(5 * 60 * 1000); // Wait 5 min to play
+    await delay(3 * 60 * 1000); // Wait 3 min to play
     await clickBrowserHeaderButton(document); // Close NotPixel
     await delay(5000); // Wait window to close
   }
