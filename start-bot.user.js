@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.3
+// @version     2.5
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -93,21 +93,49 @@ async function clickBrowserHeaderButton(document) {
     console.warn("Browser header element not found");
   }
 }
+
+function isEarlierThan(hour) {
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
+
+  // Check if the current time is earlier than 8:00 AM
+  if (currentHour < hour || (currentHour === 8 && currentMinute === 0)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+function isLaterThan(hour) {
+  const now = new Date();
+  const currentHour = now.getHours();
+
+  // Check if the current time is earlier than 8:00 AM
+  if (currentHour > hour) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 /** ------------------------------------------------------------------------------- */
 
 const init = async () => {
   await delay(5000); // Wait for window to load
 
-  const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
+  if (isEarlierThan(8) || isLaterThan(20)) {
+    await launchBlum(window); // Start Blum
+  } else {
+    const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
-  if (hasNotPixel) {
-    await launchNotPixel(window);
-    await delay(3 * 60 * 1000); // Wait 3 min to play
-    await clickBrowserHeaderButton(document); // Close NotPixel
-    await delay(5000); // Wait window to close
+    if (hasNotPixel) {
+      await launchNotPixel(window);
+      await delay(4 * 60 * 1000); // Wait 4 min to play
+      await clickBrowserHeaderButton(document); // Close NotPixel
+      await delay(5000); // Wait window to close
+    }
   }
-
-  await launchBlum(window); // Start Blum
 };
 
 init();
