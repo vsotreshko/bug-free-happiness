@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      3.4
+// @version      3.5
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -627,6 +627,7 @@ const iterateOverTaskItems = async (taskItems, action) => {
     { title: "secure your crypto!", code: "BEST PROJECT EVER" },
     { title: "forks explained", code: "GO GET" },
     { title: "how to analyze crypto?", code: "VALUE" },
+    { title: "doxxing? what's that?", code: "NODOXXING" },
   ];
 
   if (action === "start" || action === "claim") {
@@ -717,6 +718,8 @@ const resolveTasks = async (document) => {
 };
 
 const init = async () => {
+  await delay(getRandomInt(3000, 5000));
+
   await resolveTasks(document);
 
   // Claim / Continue / Start
