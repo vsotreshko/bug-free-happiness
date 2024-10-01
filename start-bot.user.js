@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.5
+// @version     2.6
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -112,7 +112,7 @@ function isLaterThan(hour) {
   const currentHour = now.getHours();
 
   // Check if the current time is earlier than 8:00 AM
-  if (currentHour > hour) {
+  if (currentHour >= hour) {
     return true;
   } else {
     return false;
