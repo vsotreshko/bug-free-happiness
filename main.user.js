@@ -48,15 +48,17 @@ const waitForElement = async (document, selector) => {
   });
 };
 
-const closeCurrentBrowser = () => {
-  // TODO:
-};
+function executeWithProbability(code, probability = 0.1) {
+  if (Math.random() < probability) {
+    code();
+  }
+}
 
 let buttonChecks = 0;
 /** ------------------------------------------------------------------------------- */
 
 let GAME_SETTINGS = {
-  minBombHits: 0,
+  minBombHits: 1,
   minIceHits: 10,
   flowerSkipPercentage: getRandomInt(5, 9),
   minDelayMs: 2000,
@@ -100,11 +102,12 @@ try {
     }
   }
 
-  function processFlower(element) {
+  async function processFlower(element) {
     const shouldSkip = Math.random() < GAME_SETTINGS.flowerSkipPercentage / 100;
     if (shouldSkip) {
       gameStats.flowersSkipped++;
     } else {
+      await delay(getRandomInt(500, 1800));
       gameStats.score++;
       clickElement(element);
     }
@@ -112,9 +115,11 @@ try {
 
   function processBomb(element) {
     if (gameStats.bombHits < GAME_SETTINGS.minBombHits) {
-      gameStats.score = 0;
-      clickElement(element);
-      gameStats.bombHits++;
+      executeWithProbability(() => {
+        gameStats.score = 0;
+        clickElement(element);
+        gameStats.bombHits++;
+      });
     }
   }
 
@@ -125,7 +130,8 @@ try {
     }
   }
 
-  function clickElement(element) {
+  async function clickElement(element) {
+    await delay(getRandomInt(500, 1800));
     element.onClick(element);
     element.isExplosion = true;
     element.addedAt = performance.now();
