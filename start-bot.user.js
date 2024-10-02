@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.7
+// @version     2.8
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -49,6 +49,7 @@ const waitForElement = async (document, selector) => {
 };
 
 const launchBlum = async (window) => {
+  window.location.href = "https://web.telegram.org/k/#@BlumCryptoBot";
   await delay(5000);
 
   const launchBotButton = await Promise.any([
@@ -60,11 +61,26 @@ const launchBlum = async (window) => {
     await delay(1000);
     launchBotButton.click();
   } else {
-    window.location.reload();
+    window.location.href = "https://web.telegram.org/a/#@BlumCryptoBot";
+
+    await delay(5000);
+
+    const launchBotButton2 = await Promise.any([
+      waitForElement(document, "button.reply-markup-button"),
+      waitForElement(document, "div.new-message-bot-commands.is-view"),
+    ]);
+
+    if (launchBotButton2) {
+      await delay(1000);
+      launchBotButton2.click();
+    } else {
+      window.location.reload();
+    }
   }
 };
 
 const launchNotPixel = async (window) => {
+  window.location.href = "https://web.telegram.org/k/#@notpixel";
   await delay(5000);
 
   const launchBotButton = await Promise.any([
@@ -79,7 +95,24 @@ const launchNotPixel = async (window) => {
     await delay(1000);
     launchBotButton.click();
   } else {
-    window.location.reload();
+    window.location.href = "https://web.telegram.org/a/#@notpixel";
+
+    await delay(5000);
+
+    const launchBotButton2 = await Promise.any([
+      waitForElement(
+        document,
+        "#column-center > div > div > div.bubbles.has-groups.has-sticky-dates.scrolled-down > div.scrollable.scrollable-y > div.bubbles-inner.has-rights > section > div.bubbles-group.bubbles-group-last > div.bubble.with-reply-markup.hide-name.is-in.can-have-tail.is-group-last > div > div.reply-markup > div:nth-child(1) > a > div"
+      ),
+      waitForElement(document, "div.new-message-bot-commands.is-view"),
+    ]);
+
+    if (launchBotButton2) {
+      await delay(1000);
+      launchBotButton2.click();
+    } else {
+      window.location.reload();
+    }
   }
 };
 
@@ -123,15 +156,11 @@ const init = async () => {
   await delay(5000); // Wait for window to load
 
   if (isEarlierThan(8) || isLaterThan(20)) {
-    const hasBlum = await waitForElement(document, 'a[href="#6865543862"]');
-    if (hasBlum) {
-      hasBlum.click();
-    }
+    await launchBlum(window); // Start Blum
   } else {
     const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
     if (hasNotPixel) {
-      hasNotPixel.click();
       await launchNotPixel(window);
       await delay(4 * 60 * 1000); // Wait 4 min to play
       await clickBrowserHeaderButton(document); // Close NotPixel
