@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.8
+// @version     2.9
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -61,7 +61,7 @@ const launchBlum = async (window) => {
     await delay(1000);
     launchBotButton.click();
   } else {
-    window.location.href = "https://web.telegram.org/a/#@BlumCryptoBot";
+    window.location.href = "https://web.telegram.org/a/#6865543862";
 
     await delay(5000);
 
@@ -95,7 +95,7 @@ const launchNotPixel = async (window) => {
     await delay(1000);
     launchBotButton.click();
   } else {
-    window.location.href = "https://web.telegram.org/a/#@notpixel";
+    window.location.href = "https://web.telegram.org/a/#7249432100";
 
     await delay(5000);
 
@@ -155,9 +155,13 @@ function isLaterThan(hour) {
 const init = async () => {
   await delay(5000); // Wait for window to load
 
-  if (isEarlierThan(8) || isLaterThan(20)) {
+  // 06:00 -> 09:00 or 18:00 -> 23:00
+  if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(21))) {
     await launchBlum(window); // Start Blum
-  } else {
+  }
+
+  // 09:00 -> 18:00
+  if (isLaterThan(9) && isEarlierThan(18)) {
     const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
     if (hasNotPixel) {
