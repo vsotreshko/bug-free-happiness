@@ -628,6 +628,7 @@ const iterateOverTaskItems = async (taskItems, action) => {
     { title: "forks explained", code: "GO GET" },
     { title: "how to analyze crypto?", code: "VALUE" },
     { title: "doxxing? what's that?", code: "NODOXXING" },
+    { title: "pre-market trading?", code: "WOWBLUM" },
   ];
 
   if (action === "start" || action === "claim") {
