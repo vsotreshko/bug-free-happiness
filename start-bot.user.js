@@ -49,7 +49,6 @@ const waitForElement = async (document, selector) => {
 };
 
 const launchBlum = async (window) => {
-  window.location.href = "https://web.telegram.org/k/#@BlumCryptoBot";
   await delay(5000);
 
   const launchBotButton = await Promise.any([
@@ -66,7 +65,6 @@ const launchBlum = async (window) => {
 };
 
 const launchNotPixel = async (window) => {
-  window.location.href = "https://web.telegram.org/k/#@notpixel";
   await delay(5000);
 
   const launchBotButton = await Promise.any([
@@ -125,11 +123,15 @@ const init = async () => {
   await delay(5000); // Wait for window to load
 
   if (isEarlierThan(8) || isLaterThan(20)) {
-    await launchBlum(window); // Start Blum
+    const hasBlum = await waitForElement(document, 'a[href="#6865543862"]');
+    if (hasBlum) {
+      hasBlum.click();
+    }
   } else {
     const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
     if (hasNotPixel) {
+      hasNotPixel.click();
       await launchNotPixel(window);
       await delay(4 * 60 * 1000); // Wait 4 min to play
       await clickBrowserHeaderButton(document); // Close NotPixel
