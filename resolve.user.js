@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.5
+// @version     2.6
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -122,13 +122,9 @@ function randomClick() {
     return;
   }
 
-  const paintButton = document.evaluate(
-    '//*[@id="root"]/div/div[5]/div/button',
-    document,
-    null,
-    XPathResult.FIRST_ORDERED_NODE_TYPE,
-    null
-  ).singleNodeValue;
+  const paintButton = Array.from(document.querySelectorAll('button[class^="_button_"]')).filter(
+    (button) => button.textContent.includes("Paint") || button.textContent.includes("No energy")
+  )[0];
   if (paintButton) {
     const buttonText = paintButton.querySelector('span[class^="_button_text_"]').textContent;
 
@@ -219,10 +215,43 @@ function checkGameCrash() {
 
 checkGameCrash();
 
+// Новая функция для выполнения начальных случайных движений
+function initialRandomMoves() {
+  return new Promise((resolve) => {
+    waitForElement("#canvasHolder", (canvas) => {
+      const moves = Math.floor(Math.random() * 10) + 1; // От 1 до 10 движений
+      let moveCount = 0;
+
+      function performMove() {
+        if (moveCount < moves) {
+          const moveX = Math.floor(Math.random() * 200) - 100; // От -100 до 100
+          const moveY = Math.floor(Math.random() * 200) - 100; // От -100 до 100
+          simulatePointerEvents(
+            canvas,
+            canvas.width / 2,
+            canvas.height / 2,
+            canvas.width / 2 + moveX,
+            canvas.height / 2 + moveY
+          );
+          moveCount++;
+          setTimeout(performMove, 500);
+        } else {
+          resolve();
+        }
+      }
+
+      performMove();
+    });
+  });
+}
+
 // Запуск скрипта
 function startScript() {
   openPaintWindow();
-  setTimeout(randomClick, 2000);
+  initialRandomMoves().then(() => {
+    console.log("Начальные случайные движения выполнены. Начинаем нормальную работу.");
+    setTimeout(randomClick, 2000);
+  });
 }
 
 startScript();
@@ -882,13 +911,13 @@ function saveSettings() {
 
 // Загрузка настроек
 function loadSettings() {
-  const savedSettings = null;
-  if (savedSettings) {
-    const parsedSettings = JSON.parse(savedSettings);
-    Object.assign(GAME_SETTINGS, parsedSettings);
-  }
-  updateSettingsMenu();
-  updatePauseButton();
+  // const savedSettings = localStorage.getItem("NotPixelAutoclickerSettings");
+  // if (savedSettings) {
+  //   const parsedSettings = JSON.parse(savedSettings);
+  //   Object.assign(GAME_SETTINGS, parsedSettings);
+  // }
+  // updateSettingsMenu();
+  // updatePauseButton();
 }
 
 // Флаги для управления автокликером
