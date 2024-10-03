@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.9
+// @version     3.0
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       https://web.telegram.org/*
@@ -161,7 +161,7 @@ const init = async () => {
   }
 
   // 09:00 -> 18:00
-  if (isLaterThan(9) && isEarlierThan(18)) {
+  if ((isLaterThan(9) && isEarlierThan(18)) || (isLaterThan(0) && isEarlierThan(6))) {
     const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
     if (hasNotPixel) {
