@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.1
+// @version     3.2
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -141,7 +141,7 @@ const init = async () => {
   await delay(5000); // Wait for window to load
 
   // 06:00 -> 09:00 or 18:00 -> 23:00
-  if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(21))) {
+  if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(24))) {
     await launchBlum(window, document); // Start Blum
   }
 
