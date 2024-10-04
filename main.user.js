@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      3.8
+// @version      3.9
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -48,13 +48,12 @@ const waitForElement = async (document, selector) => {
   });
 };
 
-function executeWithProbability(code, probability = 0.1) {
+function executeWithProbability(code, probability = 0.05) {
   if (Math.random() < probability) {
     code();
   }
 }
 
-let buttonChecks = 0;
 /** ------------------------------------------------------------------------------- */
 
 let GAME_SETTINGS = {
@@ -102,12 +101,11 @@ try {
     }
   }
 
-  async function processFlower(element) {
+  function processFlower(element) {
     const shouldSkip = Math.random() < GAME_SETTINGS.flowerSkipPercentage / 100;
     if (shouldSkip) {
       gameStats.flowersSkipped++;
     } else {
-      await delay(getRandomInt(500, 1800));
       gameStats.score++;
       clickElement(element);
     }
@@ -131,7 +129,7 @@ try {
   }
 
   async function clickElement(element) {
-    await delay(getRandomInt(500, 1800));
+    await delay(getRandomInt(500, 1500));
     element.onClick(element);
     element.isExplosion = true;
     element.addedAt = performance.now();
@@ -162,7 +160,6 @@ try {
   }
 
   function checkAndClickPlayButton() {
-    buttonChecks = buttonChecks + 1;
     const playButtons = document.querySelectorAll(
       'button.kit-button.is-large.is-primary, a.play-btn[href="/game"], button.kit-button.is-large.is-primary'
     );
@@ -175,7 +172,6 @@ try {
       ) {
         setTimeout(() => {
           button.click();
-          buttonChecks = 0;
           gameStats.isGameOver = false;
         }, getNewGameDelay());
       }
@@ -184,10 +180,6 @@ try {
 
   function continuousPlayButtonCheck() {
     checkAndClickPlayButton();
-
-    if (buttonChecks > 30) {
-      closeCurrentBrowser();
-    }
 
     setTimeout(() => {
       continuousPlayButtonCheck();
@@ -726,10 +718,6 @@ const resolveTasks = async (document) => {
 };
 
 const init = async () => {
-  await delay(getRandomInt(3000, 5000));
-
-  await resolveTasks(document);
-
   // Claim / Continue / Start
   const claimButton = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
   if (claimButton) {
@@ -737,12 +725,11 @@ const init = async () => {
     claimButton.click();
   }
 
-  await delay(getRandomInt(3000, 5000));
+  await resolveTasks(document);
 
   // Open Frens tab
   const frensTab = await waitForElement(document, 'a[href*="/frens"]');
   if (frensTab) {
-    await delay(getRandomInt(3000, 5000)); // Wait page for load
     frensTab.click();
   }
 
@@ -760,7 +747,6 @@ const init = async () => {
   // Open Home tab
   const homeTab = await waitForElement(document, 'a[href*="/"]');
   if (homeTab) {
-    await delay(getRandomInt(3000, 5000));
     homeTab.click();
   }
 
@@ -769,7 +755,6 @@ const init = async () => {
   // Claim / Continue / Start
   const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
   if (startFarming) {
-    await delay(1000);
     startFarming.click();
   }
 
