@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      3.7
+// @version      3.8
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -634,7 +634,8 @@ const iterateOverTaskItems = async (taskItems, action) => {
     { title: "forks explained", code: "GO GET" },
     { title: "how to analyze crypto?", code: "VALUE" },
     { title: "doxxing? what's that?", code: "NODOXXING" },
-    { title: "pre-market trading?", code: "WOWBLUM" },
+    // { title: "pre-market trading?", code: "WOWBLUM" }, // TODO: Not working
+    { title: "how to memecoin?", code: "MEMEBLUM" },
   ];
 
   if (action === "start" || action === "claim") {
