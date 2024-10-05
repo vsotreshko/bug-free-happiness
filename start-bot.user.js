@@ -48,23 +48,9 @@ const waitForElement = async (document, selector, timeout = 10000) => {
   });
 };
 
-const launchBlum = async (window, document) => {
-  window.location.href = "https://web.telegram.org/k/#@BlumCryptoBot";
+const launchBot = async (window, document, botName) => {
+  window.location.href = `https://web.telegram.org/k/#@${botName}`;
 
-  const launchBotButton = await Promise.any([
-    waitForElement(document, "button.reply-markup-button"),
-    waitForElement(document, "div.new-message-bot-commands.is-view"),
-  ]);
-
-  if (launchBotButton) {
-    await delay(1000);
-    launchBotButton.click();
-    await resolvePopup(document);
-  }
-};
-
-const launchNotPixel = async (window, document) => {
-  window.location.href = "https://web.telegram.org/k/#@notpixel";
   await delay(5000);
 
   const launchBotButton = await Promise.any([
@@ -142,16 +128,25 @@ const init = async () => {
 
   // 06:00 -> 09:00 or 18:00 -> 23:00
   if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(24))) {
-    await launchBlum(window, document); // Start Blum
+    await launchBot(window, document, "BlumCryptoBot");
   }
 
   // 09:00 -> 18:00
-  if ((isLaterThan(9) && isEarlierThan(18)) || (isLaterThan(0) && isEarlierThan(6))) {
+  if (isLaterThan(9) && isEarlierThan(18)) {
+    const hasBybit = await waitForElement(document, 'a[href="#7326908190"]');
+
+    if (hasBybit) {
+      await launchBot(window, document, "BybitCoinsweeper_Bot");
+    }
+  }
+
+  // 00:00 -> 06:00
+  if (isLaterThan(0) && isEarlierThan(6)) {
     const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
     if (hasNotPixel) {
-      await launchNotPixel(window, document);
-      await delay(6 * 60 * 1000); // Wait 6 min to play
+      await launchBot(window, document, "notpixel");
+      await delay(1 * 60 * 1000); // Wait 5 min to play
       await clickBrowserHeaderButton(document); // Close NotPixel
       await delay(5000); // Wait window to close
     }
