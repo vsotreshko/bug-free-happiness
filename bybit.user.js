@@ -1,18 +1,5 @@
 // ==UserScript==
 // @name         Bybit Coinsweeper
-// @namespace    Violentmonkey Scripts
-// @match        *://bybitcoinsweeper.com/*
-// @grant        none
-// @version      1.3
-// @author       mudachyo
-// @icon         https://mudachyo.codes/bybit/logo.jpg
-// @downloadURL  https://github.com/mudachyo/Bybit-Coinsweeper/raw/main/bybit-autoclicker.user.js
-// @updateURL    https://github.com/mudachyo/Bybit-Coinsweeper/raw/main/bybit-autoclicker.user.js
-// @homepage     https://github.com/mudachyo/Bybit-Coinsweeper
-// ==/UserScript==
-
-// ==UserScript==
-// @name         Bybit Coinsweeper
 // @version      1.0
 // @namespace    Violentmonkey Scripts
 // @match        *://bybitcoinsweeper.com/*
