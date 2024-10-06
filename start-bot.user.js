@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.6
+// @version     3.7
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -143,7 +143,7 @@ const resolvePopup = async (document) => {
   if (popup) {
     const launchButton = Array.from(popup.querySelectorAll("button")).find((button) => {
       const buttonText = button.querySelector("span").textContent.toLowerCase();
-      return buttonText.includes("launch");
+      return buttonText.includes("launch") || buttonText.includes("confirm");
     });
 
     await delay(1000);
