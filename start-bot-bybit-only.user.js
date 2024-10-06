@@ -2,7 +2,7 @@
 // @name        Start bot Bybit only
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     1.0
+// @version     1.1
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -95,7 +95,41 @@ const launchBot = async (window, document, kBotName, aBotName, botTitle) => {
 
   if (launchBotButton) {
     await delay(1000);
-    launchBotButton.click();
+    // Simulate a real mouse click on the launchBotButton
+    const rect = launchBotButton.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+
+    launchBotButton.dispatchEvent(
+      new MouseEvent("mousedown", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: centerX,
+        clientY: centerY,
+      })
+    );
+
+    launchBotButton.dispatchEvent(
+      new MouseEvent("mouseup", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: centerX,
+        clientY: centerY,
+      })
+    );
+
+    launchBotButton.dispatchEvent(
+      new MouseEvent("click", {
+        bubbles: true,
+        cancelable: true,
+        view: window,
+        clientX: centerX,
+        clientY: centerY,
+      })
+    );
+
     console.warn("launchBotButton clicked");
     await resolvePopup(document);
   }
