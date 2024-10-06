@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.4
+// @version     3.5
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -97,7 +97,7 @@ const launchBot = async (window, document, kBotName, aBotName, botTitle) => {
     await delay(1000);
     launchBotButton.click();
     console.warn("launchBotButton clicked");
-    // await resolvePopup(document);
+    await resolvePopup(document);
   }
 
   return null;
