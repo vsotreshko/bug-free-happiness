@@ -2,7 +2,7 @@
 // @name        Start bot Bybit only
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     1.1
+// @version     1.2
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -197,6 +197,10 @@ const init = async () => {
 
   if (hasBybit) {
     await launchBot(window, document, "BybitCoinsweeper_Bot", "7326908190", "Bybit Coinsweeper");
+
+    await delay(300000); // 5 minutes
+
+    window.location.reload();
   }
 };
 
