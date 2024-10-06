@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.3
+// @version     3.4
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -48,24 +48,59 @@ const waitForElement = async (document, selector, timeout = 10000) => {
   });
 };
 
-const launchBot = async (window, document, botName) => {
-  window.location.href = `https://web.telegram.org/k/#@${botName}`;
-
-  await delay(5000);
-
-  const launchBotButton = await Promise.any([
+const launchBot = async (window, document, kBotName, aBotName, botTitle) => {
+  const currentBotTitle = await Promise.any([
+    // a telegram version
     waitForElement(
       document,
-      "#column-center > div > div > div.bubbles.has-groups.has-sticky-dates.scrolled-down > div.scrollable.scrollable-y > div.bubbles-inner.has-rights > section > div.bubbles-group.bubbles-group-last > div.bubble.with-reply-markup.hide-name.is-in.can-have-tail.is-group-last > div > div.reply-markup > div:nth-child(1) > a > div"
+      "#MiddleColumn > div.messages-layout > div.MiddleHeader > div.Transition > div > div > div > div.info > div > h3",
+      5000
     ),
-    waitForElement(document, "div.new-message-bot-commands.is-view"),
+    // k telegram version
+    waitForElement(
+      document,
+      "#column-center > div > div > div.sidebar-header.topbar.has-avatar > div.chat-info-container > div.chat-info > div > div.content > div.top > div > span",
+      5000
+    ),
+  ]);
+
+  if (currentBotTitle && currentBotTitle.textContent === botTitle) {
+    console.log("Bot title found");
+  } else {
+    const currentUrl = window.location.href;
+    const aBotUrl = `https://web.telegram.org/a#${aBotName}`;
+    const kBotUrl = `https://web.telegram.org/k#@${kBotName}`;
+
+    if (currentUrl.includes("https://web.telegram.org/k")) {
+      window.location.href = kBotUrl;
+    } else {
+      window.location.href = aBotUrl;
+    }
+    return;
+  }
+
+  const launchBotButton = await Promise.any([
+    // a telegram version
+    waitForElement(
+      document,
+      "#MiddleColumn > div.messages-layout > div.Transition > div > div.middle-column-footer > div.Composer.shown.mounted > div.composer-wrapper > div > button.Button.bot-menu.open.default.translucent.round"
+    ),
+
+    // k telegram version
+    waitForElement(
+      document,
+      "#column-center > div > div > div.chat-input.chat-input-main > div > div.rows-wrapper-wrapper > div > div.new-message-wrapper.rows-wrapper-row.has-offset > div.new-message-bot-commands.is-view"
+    ),
   ]);
 
   if (launchBotButton) {
     await delay(1000);
     launchBotButton.click();
-    await resolvePopup(document);
+    console.warn("launchBotButton clicked");
+    // await resolvePopup(document);
   }
+
+  return null;
 };
 
 const resolvePopup = async (document) => {
@@ -124,11 +159,16 @@ function isLaterThan(hour) {
 /** ------------------------------------------------------------------------------- */
 
 const init = async () => {
+  window.onclick = (e) => {
+    console.log(e.target); // to get the element
+    console.log(e.target.tagName); // to get the element tag name alone
+  };
+
   await delay(5000); // Wait for window to load
 
   // 06:00 -> 09:00 or 18:00 -> 23:00
   if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(24))) {
-    await launchBot(window, document, "BlumCryptoBot");
+    await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
   }
 
   // 09:00 -> 18:00
@@ -136,7 +176,7 @@ const init = async () => {
     const hasBybit = await waitForElement(document, 'a[href="#7326908190"]');
 
     if (hasBybit) {
-      await launchBot(window, document, "BybitCoinsweeper_Bot");
+      await launchBot(window, document, "BybitCoinsweeper_Bot", "7326908190", "Bybit Coinsweeper");
     }
   }
 
@@ -145,7 +185,7 @@ const init = async () => {
     const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
     if (hasNotPixel) {
-      await launchBot(window, document, "notpixel");
+      await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
       await delay(1 * 60 * 1000); // Wait 5 min to play
       await clickBrowserHeaderButton(document); // Close NotPixel
       await delay(5000); // Wait window to close
