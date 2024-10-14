@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      3.9
+// @version      4.0
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -758,11 +758,11 @@ const init = async () => {
     startFarming.click();
   }
 
-  await delay(getRandomInt(3000, 5000)); // Wait after click
+  // await delay(getRandomInt(3000, 5000)); // Wait after click
 
-  loadSettings();
-  updateSettingsMenu();
-  continuousPlayButtonCheck();
+  // loadSettings();
+  // updateSettingsMenu();
+  // continuousPlayButtonCheck();
 };
 
 init();
