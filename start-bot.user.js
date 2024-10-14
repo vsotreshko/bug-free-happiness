@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.8
+// @version     3.9
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -141,6 +141,23 @@ const resolvePopup = async (document) => {
   const popup = await waitForElement(document, "div.popup-container", 3000);
 
   if (popup) {
+    const launchButton = Array.from(popup.querySelectorAll("button")).find((button) => {
+      const buttonText = button.querySelector("span").textContent.toLowerCase();
+      return buttonText.includes("launch") || buttonText.includes("confirm");
+    });
+
+    await delay(1000);
+
+    if (launchButton) {
+      launchButton.click();
+    } else {
+      console.warn("Launch button not found in popup");
+    }
+  }
+
+  const modal = await waitForElement(document, "div.modal-dialog", 3000);
+
+  if (modal) {
     const launchButton = Array.from(popup.querySelectorAll("button")).find((button) => {
       const buttonText = button.querySelector("span").textContent.toLowerCase();
       return buttonText.includes("launch") || buttonText.includes("confirm");
