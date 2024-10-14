@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.9
+// @version     4.0
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -12,6 +12,45 @@
 
 /** Custom functions -------------------------------------------------------------- */
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
+
+const simulateClick = (button) => {
+  // Simulate a real mouse click on the launchBotButton
+  const rect = button.getBoundingClientRect();
+  const centerX = rect.left + rect.width / 2;
+  const centerY = rect.top + rect.height / 2;
+
+  button.dispatchEvent(
+    new MouseEvent("mousedown", {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+      clientX: centerX,
+      clientY: centerY,
+    })
+  );
+
+  button.dispatchEvent(
+    new MouseEvent("mouseup", {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+      clientX: centerX,
+      clientY: centerY,
+    })
+  );
+
+  button.dispatchEvent(
+    new MouseEvent("click", {
+      bubbles: true,
+      cancelable: true,
+      view: window,
+      clientX: centerX,
+      clientY: centerY,
+    })
+  );
+
+  button.click();
+};
 
 const getRandomInt = (min, max) => {
   min = Math.ceil(min);
@@ -95,40 +134,7 @@ const launchBot = async (window, document, kBotName, aBotName, botTitle) => {
 
   if (launchBotButton) {
     await delay(1000);
-    // Simulate a real mouse click on the launchBotButton
-    const rect = launchBotButton.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-
-    launchBotButton.dispatchEvent(
-      new MouseEvent("mousedown", {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX: centerX,
-        clientY: centerY,
-      })
-    );
-
-    launchBotButton.dispatchEvent(
-      new MouseEvent("mouseup", {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX: centerX,
-        clientY: centerY,
-      })
-    );
-
-    launchBotButton.dispatchEvent(
-      new MouseEvent("click", {
-        bubbles: true,
-        cancelable: true,
-        view: window,
-        clientX: centerX,
-        clientY: centerY,
-      })
-    );
+    simulateClick(launchBotButton);
 
     console.warn("launchBotButton clicked");
     await resolvePopup(document);
@@ -149,7 +155,7 @@ const resolvePopup = async (document) => {
     await delay(1000);
 
     if (launchButton) {
-      launchButton.click();
+      simulateClick(launchButton);
     } else {
       console.warn("Launch button not found in popup");
     }
@@ -158,15 +164,15 @@ const resolvePopup = async (document) => {
   const modal = await waitForElement(document, "div.modal-dialog", 3000);
 
   if (modal) {
-    const launchButton = Array.from(popup.querySelectorAll("button")).find((button) => {
-      const buttonText = button.querySelector("span").textContent.toLowerCase();
+    const launchButton = Array.from(modal.querySelectorAll("button")).find((button) => {
+      const buttonText = button.textContent.toLowerCase();
       return buttonText.includes("launch") || buttonText.includes("confirm");
     });
 
     await delay(1000);
 
     if (launchButton) {
-      launchButton.click();
+      simulateClick(launchButton);
     } else {
       console.warn("Launch button not found in popup");
     }
