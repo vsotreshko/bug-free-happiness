@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      4.3
+// @version      4.4
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -774,7 +774,7 @@ const init = async () => {
   await delay(getRandomInt(3000, 5000)); // Wait after click
 
   // Claim frens
-  const frensClaim = await waitForElement(document, "button.claim-button");
+  const frensClaim = await waitForElement(document, "button.claim-button", 3000);
   if (frensClaim) {
     await delay(getRandomInt(3000, 5000));
     frensClaim.click();
