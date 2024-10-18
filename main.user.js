@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      4.2
+// @version      4.3
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -632,6 +632,7 @@ const iterateOverTaskItems = async (taskItems, action) => {
     { title: "bitcoin rainbow chart", code: "SOBLUM" },
     { title: "token burning: how & why?", code: "ONFIRE" },
     { title: "how to trade perps?", code: "CRYPTOFAN" },
+    { title: "sharding explained:", code: "BLUMTASTIC" },
   ];
 
   if (action === "start" || action === "claim") {
@@ -733,8 +734,8 @@ const resolveTasks = async (document) => {
   const tabSelectors = [
     "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(2) > span", // New
     // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(3) > span", // OnChain
-    "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(4) > span", // Socials
-    "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(5) > span", // Academy
+    // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(4) > span", // Socials
+    // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(5) > span", // Academy
   ];
 
   for (const tabSelector of tabSelectors) {
