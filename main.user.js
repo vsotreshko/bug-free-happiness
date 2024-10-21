@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      4.4
+// @version      4.5
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -633,6 +633,7 @@ const iterateOverTaskItems = async (taskItems, action) => {
     { title: "token burning: how & why?", code: "ONFIRE" },
     { title: "how to trade perps?", code: "CRYPTOFAN" },
     { title: "sharding explained:", code: "BLUMTASTIC" },
+    { title: "defi explained", code: "BLUMFORCE" },
   ];
 
   if (action === "start" || action === "claim") {
