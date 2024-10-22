@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.7
+// @version     2.8
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -144,7 +144,7 @@ const waitForElement = async (document, selector, timeout = 10000) => {
 
     // Resolve promise after 10 seconds if element is not found
     setTimeout(() => {
-      console.warn(`waitForElement: ${selector} not found after 10 seconds`);
+      console.warn(`waitForElement: ${selector} not found after ${timeout} ms`);
       observer.disconnect();
       resolve(null);
     }, timeout);
@@ -241,6 +241,24 @@ const init = async () => {
   if (!res) {
     console.log("!!! !!! Blum template not found !!! !!!");
     return;
+  }
+
+  await delay(2000);
+
+  const templateCatalogTitleSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > h1";
+  const templateCatalogTitle = await waitForElement(document, templateCatalogTitleSelector, 2000);
+
+  if (templateCatalogTitle.textContent.trim().toLowerCase().includes("templates")) {
+    await delay(2000);
+
+    const blumTemplateSelector =
+      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(1) > div:nth-child(2) > div > img";
+    const blumTemplate = await waitForElement(document, blumTemplateSelector);
+    simulateClick(blumTemplate);
+
+    const buttonSelector = "body > div:nth-child(7) > div > div > div > div:nth-child(4) > div:nth-child(1)";
+    const button = await waitForElement(document, buttonSelector);
+    simulateClick(button);
   }
 
   const canvas = await waitForElement(document, "#canvasHolder");
