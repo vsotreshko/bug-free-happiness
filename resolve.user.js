@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.9
+// @version     3.0
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -267,8 +267,8 @@ const init = async () => {
 
   const canPaintCount = await getCanPaintCount(document);
 
-  if (canPaintCount > 0 && canPaintCount % 2 === 0) {
-    for (let i = 0; i < canPaintCount / 2; i++) {
+  if (canPaintCount > 1) {
+    for (let i = 0; i < Math.floor(canPaintCount / 2); i++) {
       await delay(1000);
       await changeCursorPositionOnCanvas(canvas);
       const colors = await findColors(document);
