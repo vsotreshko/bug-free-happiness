@@ -13,31 +13,37 @@
 /** Custom functions -------------------------------------------------------------- */
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
+const getRandomInt = (min, max) => {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
+
 const simulateClick = (button) => {
   // Simulate a real mouse click on the launchBotButton
   const rect = button.getBoundingClientRect();
-  const centerX = rect.left + rect.width / 2;
-  const centerY = rect.top + rect.height / 2;
+  const centerX = rect.left + rect.width / 2 + getRandomInt(-5, 5);
+  const centerY = rect.top + rect.height / 2 + getRandomInt(-5, 5);
 
-  button.dispatchEvent(
-    new MouseEvent("mousedown", {
-      bubbles: true,
-      cancelable: true,
-      view: window,
-      clientX: centerX,
-      clientY: centerY,
-    })
-  );
+  //   button.dispatchEvent(
+  //     new MouseEvent("mousedown", {
+  //       bubbles: true,
+  //       cancelable: true,
+  //       view: window,
+  //       clientX: centerX,
+  //       clientY: centerY,
+  //     })
+  //   );
 
-  button.dispatchEvent(
-    new MouseEvent("mouseup", {
-      bubbles: true,
-      cancelable: true,
-      view: window,
-      clientX: centerX,
-      clientY: centerY,
-    })
-  );
+  //   button.dispatchEvent(
+  //     new MouseEvent("mouseup", {
+  //       bubbles: true,
+  //       cancelable: true,
+  //       view: window,
+  //       clientX: centerX,
+  //       clientY: centerY,
+  //     })
+  //   );
 
   button.dispatchEvent(
     new MouseEvent("click", {
@@ -49,13 +55,7 @@ const simulateClick = (button) => {
     })
   );
 
-  button.click();
-};
-
-const getRandomInt = (min, max) => {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min + 1)) + min;
+  //   button.click();
 };
 
 const waitForElement = async (document, selector, timeout = 10000) => {
@@ -96,6 +96,22 @@ const init = async () => {
   };
 
   console.log("MAJOR Running...");
+
+  const earnTab = await waitForElement(document, "#root > div > div > div > div > footer > a:nth-child(1)");
+  if (earnTab) {
+    simulateClick(earnTab);
+
+    await delay(getRandomInt(1000, 3000));
+
+    const tasks = document.querySelectorAll(".custom-container");
+    if (tasks.length > 0) {
+      for (const taskItem of tasks) {
+        const titleSpan = taskItem.querySelector("span");
+        const title = titleSpan.textContent.trim().toLowerCase();
+        console.log(title);
+      }
+    }
+  }
 };
 
 init();
