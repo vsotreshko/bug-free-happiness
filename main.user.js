@@ -596,7 +596,7 @@ try {
       // const parsedSettings = JSON.parse(savedSettings);
       GAME_SETTINGS = {
         ...GAME_SETTINGS,
-        // ...parsedSettings,
+        ...parsedSettings,
       };
     }
   }
@@ -612,196 +612,114 @@ try {
 } catch (e) {
   console.error("Blum Autoclicker error:", e);
 }
+const init = async () => {
+  (() => {
+    if (window.BlumAC) return;
 
-/** Custom code ------------------------------------------------------------------- */
-const iterateOverTaskItems = async (taskItems, action) => {
-  const verifyWithCodes = [
-    { title: "$2.5m+ dogs airdrop", code: "HAPPYDOGS" },
-    { title: "liquidity pools guide", code: "Blumersss" },
-    { title: "what are amms?", code: "CRYPTOSMART" },
-    { title: "say no to rug pull!", code: "SUPERBLUM" },
-    { title: "what are telegram mini apps?", code: "CRYPTOBLUM" },
-    { title: "navigating crypto", code: "HEYBLUM" },
-    { title: "secure your crypto!", code: "BEST PROJECT EVER" },
-    { title: "forks explained", code: "GO GET" },
-    { title: "how to analyze crypto?", code: "VALUE" },
-    { title: "doxxing? what's that?", code: "NODOXXING" },
-    // { title: "pre-market trading?", code: "WOWBLUM" }, // TODO: Not working
-    { title: "how to memecoin?", code: "MEMEBLUM" },
-    { title: "crypto terms. part 1", code: "BLUMEXPLORER" },
-    { title: "bitcoin rainbow chart", code: "SOBLUM" },
-    { title: "token burning: how & why?", code: "ONFIRE" },
-    { title: "how to trade perps?", code: "CRYPTOFAN" },
-    { title: "sharding explained:", code: "BLUMTASTIC" },
-    { title: "defi explained", code: "BLUMFORCE" },
-  ];
+    window.BlumAC = true;
 
-  if (action === "start" || action === "claim") {
-    for (const taskItem of taskItems) {
-      // Find and click the div with text "Start" inside the task item
-      const startDiv = taskItem.querySelector("div.label");
-      if (startDiv && startDiv.textContent.trim().toLowerCase() === action) {
-        startDiv.scrollIntoView();
-        startDiv.click();
-        await delay(getRandomInt(2000, 3000)); // Wait for potential action to complete
-      }
+    const config = {
+      autoPlay: true,
+      greenColor: [208, 216, 0],
+      whiteColor: [255, 255, 255],
+      bombColor: [126, 119, 121],
+      flowerTolerance: 5,
+      iceTolerance: 5,
+      bombTolerance: 5,
+      playButtonSelector: "button.is-primary, .play-btn",
+      canvasSelector: "canvas",
+      playCheckInterval: 5000,
+      objectCheckInterval: 100,
+      excludedArea: { top: 70, bottom: 100 },
+      startGameDelay: 1000,
+      flowerClickProbability: 0.9,
+      iceClickProbability: 0.9,
+    };
+
+    // Tự động nhấn nút "Play"
+    if (config.autoPlay) {
+      setInterval(() => {
+        const playButton = document.querySelector(config.playButtonSelector);
+        if (playButton && playButton.textContent.toLowerCase().includes("play")) {
+          playButton.click();
+
+          // Chờ 3 giây trước khi bắt đầu quá trình tự động click
+          setTimeout(() => {
+            startAutoClick();
+          }, config.startGameDelay); // 3000ms = 3 giây
+        }
+      }, config.playCheckInterval);
     }
-  }
 
-  if (action === "verify") {
-    for (const taskItem of taskItems) {
-      const startDiv = taskItem.querySelector("div.label");
+    // Hàm bắt đầu quá trình tự động click
+    function startAutoClick() {
+      setInterval(() => {
+        const canvas = document.querySelector(config.canvasSelector);
+        if (canvas) detectAndClickObjects(canvas);
+      }, config.objectCheckInterval);
+    }
 
-      if (startDiv && startDiv.textContent.trim().toLowerCase() === "verify") {
-        const title = taskItem.querySelector("div.title");
-        const taskTitle = title?.textContent.trim().toLowerCase();
+    function detectAndClickObjects(canvas) {
+      const { width, height } = canvas;
+      const context = canvas.getContext("2d");
+      const imageData = context.getImageData(0, 0, width, height);
+      const pixels = imageData.data;
 
-        const verifyWithCode = verifyWithCodes.find((code) => code.title === taskTitle);
+      let loopShouldWork = true;
 
-        if (verifyWithCode) {
-          startDiv.scrollIntoView();
-          startDiv.click();
-          const verifyPage = await waitForElement(document, "div.pages-tasks-verify");
+      for (let y = config.excludedArea.top; y < height - config.excludedArea.bottom; y++) {
+        if (!loopShouldWork) break;
 
-          if (verifyPage) {
-            const verifyPageTitle = await waitForElement(
-              verifyPage,
-              "div.pages-tasks-verify > div.heading > div.title"
-            );
-            if (verifyPage && verifyPageTitle.textContent.trim().toLowerCase() === verifyWithCode.title) {
-              const input = await waitForElement(verifyPage, "input[type=text]");
+        for (let x = 0; x < width; x++) {
+          const index = (y * width + x) * 4;
+          const [r, g, b] = [pixels[index], pixels[index + 1], pixels[index + 2]];
 
-              await delay(getRandomInt(1000, 2000));
-              input.value = verifyWithCode.code;
-              input.dispatchEvent(new Event("input", { bubbles: true }));
-              await delay(getRandomInt(1000, 2000));
+          if (isColorSuits(r, g, b, config.bombColor, config.bombTolerance)) {
+            executeWithProbability(() => {
+              simulateClick(canvas, x, y);
+            }, config.flowerClickProbability);
 
-              const submitButton = await waitForElement(verifyPage, "button.kit-button.is-large");
+            loopShouldWork = false;
+            break;
+          } else {
+            if (isColorSuits(r, g, b, config.greenColor, config.flowerTolerance)) {
+              executeWithProbability(() => {
+                simulateClick(canvas, x, y);
+              }, config.flowerClickProbability);
 
-              if (submitButton) {
-                submitButton.click();
-                await delay(getRandomInt(2000, 3000));
-              }
+              loopShouldWork = false;
+              break;
+            }
+
+            if (isColorSuits(r, g, b, config.whiteColor, config.iceTolerance)) {
+              executeWithProbability(() => {
+                simulateClick(canvas, x, y);
+              }, config.iceClickProbability);
+
+              loopShouldWork = false;
+              break;
             }
           }
         }
       }
     }
-  }
-};
-const resolveTasks = async (document) => {
-  // Open Tasks tab
-  const tasksTab = await waitForElement(document, 'a[href*="/tasks"]');
-  if (tasksTab) {
-    await delay(getRandomInt(3000, 5000)); // Wait page for load
-    tasksTab.click();
-  }
 
-  await delay(getRandomInt(3000, 5000)); // Wait page for load
+    function isColorSuits(r, g, b, greenColor, tolerance) {
+      const gc = greenColor;
+      const t = tolerance;
+      const greenRange =
+        gc[0] - t < r && r < gc[0] + t && gc[1] - t < g && g < gc[1] + t && gc[2] - t < b && b < gc[2] + t;
 
-  const weekly = await waitForElement(
-    document,
-    "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div > div.footer > button"
-  );
-
-  if (weekly) {
-    weekly.click();
-
-    const weeklyPage = await waitForElement(
-      document,
-      "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog"
-    ); // Get all task items
-
-    if (weeklyPage) {
-      const weeklyTaskItems = weeklyPage.querySelectorAll(".pages-tasks-list-item-label"); // Get all task items
-
-      await iterateOverTaskItems(weeklyTaskItems, "start"); // Start all
-
-      await iterateOverTaskItems(weeklyTaskItems, "verify"); // Verify if needed
-
-      await iterateOverTaskItems(weeklyTaskItems, "claim"); // Claim all
+      return greenRange;
     }
 
-    const closeWeeklyButton = await waitForElement(
-      document,
-      "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog > div.header-with-banner > div > div.right-slot > button"
-    );
-
-    if (closeWeeklyButton) {
-      closeWeeklyButton.click();
+    function simulateClick(canvas, x, y) {
+      const eventProps = { clientX: x, clientY: y, bubbles: true };
+      ["click", "mousedown", "mouseup"].forEach((event) => {
+        canvas.dispatchEvent(new MouseEvent(event, eventProps));
+      });
     }
-  }
-
-  const tabSelectors = [
-    "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(2) > span", // New
-    // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(3) > span", // OnChain
-    // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(4) > span", // Socials
-    // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(5) > span", // Academy
-  ];
-
-  for (const tabSelector of tabSelectors) {
-    const tab = document.querySelector(tabSelector);
-
-    tab.click();
-
-    await delay(getRandomInt(3000, 5000)); // Wait page for load
-
-    const taskItems = document.querySelectorAll(".pages-tasks-item"); // Get all task items
-
-    await iterateOverTaskItems(taskItems, "start"); // Start all
-
-    await iterateOverTaskItems(taskItems, "verify"); // Verify if needed
-
-    await iterateOverTaskItems(taskItems, "claim"); // Claim all
-  }
-};
-
-const init = async () => {
-  // Claim / Continue / Start
-  const claimButton = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
-  if (claimButton) {
-    await delay(getRandomInt(3000, 5000));
-    claimButton.click();
-  }
-
-  await resolveTasks(document);
-
-  // Open Frens tab
-  const frensTab = await waitForElement(document, 'a[href*="/frens"]');
-  if (frensTab) {
-    frensTab.click();
-  }
-
-  await delay(getRandomInt(3000, 5000)); // Wait after click
-
-  // Claim frens
-  const frensClaim = await waitForElement(document, "button.claim-button", 2000);
-  if (frensClaim) {
-    await delay(getRandomInt(3000, 5000));
-    frensClaim.click();
-  }
-
-  await delay(getRandomInt(3000, 5000)); // Wait after click
-
-  // Open Home tab
-  const homeTab = await waitForElement(document, 'a[href*="/"]');
-  if (homeTab) {
-    homeTab.click();
-  }
-
-  await delay(getRandomInt(3000, 5000)); // Wait after click
-
-  // Claim / Continue / Start
-  const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
-  if (startFarming) {
-    startFarming.click();
-  }
-
-  // await delay(getRandomInt(3000, 5000)); // Wait after click
-
-  // loadSettings();
-  // updateSettingsMenu();
-  // continuousPlayButtonCheck();
+  })();
 };
 
 init();
