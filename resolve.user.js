@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.2
+// @version     3.3
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -248,7 +248,7 @@ const init = async () => {
   const templateCatalogTitleSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > h1";
   const templateCatalogTitle = await waitForElement(document, templateCatalogTitleSelector, 2000);
 
-  if (templateCatalogTitle.textContent.trim().toLowerCase().includes("templates")) {
+  if (templateCatalogTitle && templateCatalogTitle.textContent.trim().toLowerCase().includes("templates")) {
     await delay(2000);
 
     const blumTemplateSelector =
