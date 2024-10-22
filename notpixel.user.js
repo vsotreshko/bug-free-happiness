@@ -201,35 +201,59 @@ const findColors = async (document) => {
   return colors;
 };
 
-const init = async () => {
-  console.log("NotPixel Running...");
+const clickByCoof = async (canvas, x, y) => {
+  simulatePointerEvents(canvas, canvas.width * x, canvas.height * y, canvas.width * x, canvas.height * y);
+  simulateClickX(canvas);
+};
 
-  // Wait for the blum template to appear
-  await delay(3000);
+const changeCursorPositionOnCanvas = async (canvas) => {
+  const quarter = getRandomInt(20, 30) / 100; // (20 - 30)
+  await clickByCoof(canvas, quarter, quarter);
+};
 
+const selectBlumTemplate = async (document) => {
   const blumTemplateSelector = "#root > div > div:nth-child(3) > div > div > button:nth-of-type(2)";
   const blumTemplate = await waitForElement(document, blumTemplateSelector);
   if (blumTemplate) {
     console.log("Found blum template");
     simulateClick(blumTemplate);
+    return true;
   }
 
-  // Wait for animation to finish
-  console.log("Waiting for canvas");
-  await delay(5000);
-  const canvas = await waitForElement(document, "#canvasHolder");
-  simulatePointerEvents(canvas, canvas.width / 2, canvas.height / 2, canvas.width / 2, canvas.height / 2);
-  simulateClickX(canvas);
+  return false;
+};
 
+const getCanPaintCount = async (document) => {
   const canPaintCountSelector =
     "#root > div > div:nth-child(7) > div > button > div:nth-child(1) > div > div:nth-child(2) > span:nth-child(2)";
   const canPaintCountElement = await waitForElement(document, canPaintCountSelector);
-  const canPaintCount = parseInt(canPaintCountElement.textContent);
+  return parseInt(canPaintCountElement.textContent);
+};
 
-  console.log(`Can paint ${canPaintCount} times`);
+const init = async () => {
+  console.log("NotPixel Running...");
+
+  // Wait for the page to load
+  await delay(3000);
+
+  let res = await selectBlumTemplate(document);
+  if (!res) {
+    console.log("!!! !!! Blum template not found !!! !!!");
+    return;
+  }
+
+  const canvas = await waitForElement(document, "#canvasHolder");
+  await changeCursorPositionOnCanvas(canvas);
+  await delay(1000);
+
+  const canPaintCount = await getCanPaintCount(document);
+
   if (canPaintCount > 0 && canPaintCount % 2 === 0) {
-    const colors = await findColors(document);
-    for (let i = 0; i < 2; i++) {
+    for (let i = 0; i < canPaintCount / 2; i++) {
+      await delay(1000);
+      await changeCursorPositionOnCanvas(canvas);
+      const colors = await findColors(document);
+
       for (const color of colors) {
         simulateClickX(color);
         await delay(500);
