@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     2.8
+// @version     2.9
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -256,7 +256,7 @@ const init = async () => {
     const blumTemplate = await waitForElement(document, blumTemplateSelector);
     simulateClick(blumTemplate);
 
-    const buttonSelector = "body > div:nth-child(7) > div > div > div > div:nth-child(4) > div:nth-child(1)";
+    const buttonSelector = "body > div:nth-child(7) > div > div > div > div:nth-child(4) > button";
     const button = await waitForElement(document, buttonSelector);
     simulateClick(button);
   }
