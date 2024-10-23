@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      5.0
+// @version      5.1
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -71,7 +71,7 @@ const playGame = async () => {
       bombTolerance: 5,
       playButtonSelector: "button.is-primary, .play-btn",
       canvasSelector: "canvas",
-      playCheckInterval: 5000,
+      playCheckInterval: 2500,
       objectCheckInterval: 100,
       excludedArea: { top: 70, bottom: 50 },
       startGameDelay: 1000,
