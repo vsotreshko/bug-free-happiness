@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      4.9
+// @version      5.0
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -350,37 +350,37 @@ const init = async () => {
     await delay(getRandomInt(3000, 5000));
     claimButton.click();
   }
-  await resolveTasks(document);
+  // await resolveTasks(document);
 
-  // Open Frens tab
-  const frensTab = await waitForElement(document, 'a[href*="/frens"]');
-  if (frensTab) {
-    frensTab.click();
-  }
-  await delay(getRandomInt(3000, 5000)); // Wait after click
+  // // Open Frens tab
+  // const frensTab = await waitForElement(document, 'a[href*="/frens"]');
+  // if (frensTab) {
+  //   frensTab.click();
+  // }
+  // await delay(getRandomInt(3000, 5000)); // Wait after click
 
-  // Claim frens
-  const frensClaim = await waitForElement(document, "button.claim-button", 2000);
-  if (frensClaim) {
-    await delay(getRandomInt(3000, 5000));
-    frensClaim.click();
-  }
-  await delay(getRandomInt(3000, 5000)); // Wait after click
+  // // Claim frens
+  // const frensClaim = await waitForElement(document, "button.claim-button", 2000);
+  // if (frensClaim) {
+  //   await delay(getRandomInt(3000, 5000));
+  //   frensClaim.click();
+  // }
+  // await delay(getRandomInt(3000, 5000)); // Wait after click
 
-  // Open Home tab
-  const homeTab = await waitForElement(document, 'a[href*="/"]');
-  if (homeTab) {
-    homeTab.click();
-  }
-  await delay(getRandomInt(3000, 5000)); // Wait after click
+  // // Open Home tab
+  // const homeTab = await waitForElement(document, 'a[href*="/"]');
+  // if (homeTab) {
+  //   homeTab.click();
+  // }
+  // await delay(getRandomInt(3000, 5000)); // Wait after click
 
-  // Claim / Continue / Start
-  const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
-  if (startFarming) {
-    startFarming.click();
-  }
+  // // Claim / Continue / Start
+  // const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
+  // if (startFarming) {
+  //   startFarming.click();
+  // }
 
-  // playGame();
+  playGame();
 };
 
 init();
