@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      4.8
+// @version      4.9
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -338,11 +338,9 @@ const init = async () => {
   await delay(5000);
 
   // Find "Continue" button
-  const continueButton = Array.from(document.querySelectorAll("*")).find(
-    (el) => el.textContent.trim().toLowerCase() === "continue"
-  );
-
+  const continueButton = await waitForElement(document, "button.kit-button.is-large.is-fill");
   if (continueButton) {
+    await delay(getRandomInt(3000, 5000));
     continueButton.click();
   }
 
