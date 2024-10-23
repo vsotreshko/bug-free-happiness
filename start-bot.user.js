@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.4
+// @version     4.5
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -224,7 +224,11 @@ const init = async () => {
   await delay(5000); // Wait for window to load
 
   // 06:00 -> 09:00 or 18:00 -> 23:00
-  if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(24))) {
+  if (
+    (isLaterThan(6) && isEarlierThan(9)) ||
+    (isLaterThan(18) && isEarlierThan(24)) ||
+    (isLaterThan(0) && isEarlierThan(3))
+  ) {
     await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
   }
 
@@ -239,8 +243,8 @@ const init = async () => {
     }
   }
 
-  // 00:00 -> 06:00
-  if (isLaterThan(0) && isEarlierThan(6)) {
+  // 03:00 -> 06:00
+  if (isLaterThan(3) && isEarlierThan(6)) {
     const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
     if (hasNotPixel) {
