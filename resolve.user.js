@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.3
+// @version     3.4
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -231,6 +231,24 @@ const getCanPaintCount = async (document) => {
   return parseInt(canPaintCountElement.textContent);
 };
 
+const autoClaimReward = async (document) => {
+  const claimMenuButtonSelector = "#root > div > div:nth-child(1) > div > div:nth-child(2) > div:nth-child(2) > button";
+  const claimMenuButton = await waitForElement(document, claimMenuButtonSelector);
+  simulateClick(claimMenuButton);
+
+  await delay(1000);
+
+  const claimButtonSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button";
+  const claimButton = await waitForElement(document, claimButtonSelector);
+  simulateClick(claimButton);
+
+  await delay(1000);
+
+  const backButtonSelector = "#root > div > div:nth-child(2) > button";
+  const backButton = await waitForElement(document, backButtonSelector);
+  simulateClick(backButton);
+};
+
 const init = async () => {
   console.log("NotPixel Running...");
 
@@ -287,6 +305,8 @@ const init = async () => {
       }
     }
   }
+
+  await autoClaimReward(document);
 };
 
 init();
