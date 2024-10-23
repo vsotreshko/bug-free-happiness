@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      5.1
+// @version      5.2
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -60,9 +60,10 @@ const playGame = async () => {
     if (window.BlumAC) return;
 
     window.BlumAC = true;
-
+    let gamesCounter = 0;
     const config = {
       autoPlay: true,
+      maxGamesInRow: 7,
       greenColor: [208, 216, 0],
       whiteColor: [255, 255, 255],
       bombColor: [126, 119, 121],
@@ -82,11 +83,12 @@ const playGame = async () => {
       matchThreshold: 0.6, // Percentage of matching surrounding pixels required
     };
 
-    if (config.autoPlay) {
+    if (config.autoPlay && gamesCounter <= config.maxGamesInRow) {
       setInterval(() => {
         const playButton = document.querySelector(config.playButtonSelector);
         if (playButton && playButton.textContent.toLowerCase().includes("play")) {
           playButton.click();
+          gamesCounter++;
           setTimeout(() => {
             startAutoClick();
           }, config.startGameDelay);
