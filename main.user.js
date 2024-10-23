@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      5.3
+// @version      5.4
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -63,7 +63,7 @@ const playGame = async () => {
     let gamesCounter = 0;
     const config = {
       autoPlay: true,
-      maxGamesInRow: 6,
+      maxGamesInRow: 5,
       greenColor: [208, 216, 0],
       whiteColor: [255, 255, 255],
       bombColor: [126, 119, 121],
@@ -83,8 +83,9 @@ const playGame = async () => {
       matchThreshold: 0.6, // Percentage of matching surrounding pixels required
     };
 
-    if (config.autoPlay && gamesCounter <= config.maxGamesInRow) {
+    if (config.autoPlay) {
       setInterval(() => {
+        if (gamesCounter >= config.maxGamesInRow) return;
         const playButton = document.querySelector(config.playButtonSelector);
         if (playButton && playButton.textContent.toLowerCase().includes("play")) {
           playButton.click();
@@ -337,17 +338,15 @@ const resolveTasks = async (document) => {
 };
 
 const init = async () => {
-  await delay(5000);
-
   // Find "Continue" button
-  const continueButton = await waitForElement(document, "button.kit-button.is-large.is-fill");
+  const continueButton = await waitForElement(document, "button.kit-button.is-large.is-fill", 2000);
   if (continueButton) {
     await delay(getRandomInt(3000, 5000));
     continueButton.click();
   }
 
   // Claim / Continue / Start
-  const claimButton = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
+  const claimButton = await waitForElement(document, "button.kit-button.is-large.is-fill.button", 2000);
   if (claimButton) {
     await delay(getRandomInt(3000, 5000));
     claimButton.click();
