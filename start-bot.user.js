@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.6
+// @version     4.7
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -230,13 +230,14 @@ const init = async () => {
 
   // 09:00 -> 18:00
   if (isLaterThan(9) && isEarlierThan(18)) {
-    const hasBybit = await waitForElement(document, 'a[href="#7326908190"]');
+    // const hasBybit = await waitForElement(document, 'a[href="#7326908190"]');
 
-    if (hasBybit) {
-      await launchBot(window, document, "BybitCoinsweeper_Bot", "7326908190", "Bybit Coinsweeper");
-      await delay(300000); // 5 minutes
-      window.location.reload();
-    }
+    // if (hasBybit) {
+    // await launchBot(window, document, "BybitCoinsweeper_Bot", "7326908190", "Bybit Coinsweeper");
+    await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
+    await delay(300000); // 5 minutes
+    window.location.reload();
+    // }
   }
 
   // 00:00 -> 06:00
