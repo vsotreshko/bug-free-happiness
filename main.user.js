@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      5.5
+// @version      5.6
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -69,7 +69,7 @@ const playGame = async () => {
       bombColor: [126, 119, 121],
       flowerTolerance: 9,
       iceTolerance: 5,
-      bombTolerance: 5,
+      bombTolerance: 3,
       playButtonSelector: "button.is-primary, .play-btn",
       canvasSelector: "canvas",
       playCheckInterval: 2500,
@@ -79,7 +79,7 @@ const playGame = async () => {
       flowerClickProbability: 1,
       iceClickProbability: 0.9,
       // Add configuration for surrounding pixel check
-      surroundingPixelRadius: 2, // Check pixels within this radius
+      surroundingPixelRadius: 1, // Check pixels within this radius
       matchThreshold: 0.6, // Percentage of matching surrounding pixels required
     };
 
@@ -151,10 +151,6 @@ const playGame = async () => {
             isColorSuits(r, g, b, config.bombColor, config.bombTolerance) &&
             checkSurroundingPixels(pixels, width, height, x, y, config.bombColor, config.bombTolerance)
           ) {
-            executeWithProbability(() => {
-              simulateClick(canvas, x, y);
-            }, config.flowerClickProbability);
-
             loopShouldWork = false;
             break;
           }
