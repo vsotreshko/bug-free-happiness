@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.7
+// @version     4.8
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -230,27 +230,25 @@ const init = async () => {
 
   // 09:00 -> 18:00
   if (isLaterThan(9) && isEarlierThan(18)) {
-    // const hasBybit = await waitForElement(document, 'a[href="#7326908190"]');
+    const hasBybit = await waitForElement(document, 'a[href="#7326908190"]');
 
-    // if (hasBybit) {
-    // await launchBot(window, document, "BybitCoinsweeper_Bot", "7326908190", "Bybit Coinsweeper");
-    await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
-    await delay(300000); // 5 minutes
-    window.location.reload();
-    // }
+    if (hasBybit) {
+      await launchBot(window, document, "BybitCoinsweeper_Bot", "7326908190", "Bybit Coinsweeper");
+      await delay(300000); // 5 minutes
+      window.location.reload();
+    }
   }
 
   // 00:00 -> 06:00
   if (isLaterThan(0) && isEarlierThan(6)) {
-    await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
-    // const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
+    const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
 
-    // if (hasNotPixel) {
-    //   await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
-    //   await delay(1 * 60 * 1000); // Wait 5 min to play
-    //   await clickBrowserHeaderButton(document); // Close NotPixel
-    //   await delay(5000); // Wait window to close
-    // }
+    if (hasNotPixel) {
+      await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
+      await delay(1 * 60 * 1000); // Wait 5 min to play
+      await clickBrowserHeaderButton(document); // Close NotPixel
+      await delay(5000); // Wait window to close
+    }
   }
 
   // await launchBot(window, document, "major", "7487372978", "Major");
