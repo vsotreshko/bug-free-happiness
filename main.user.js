@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      5.6
+// @version      5.7
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -64,7 +64,7 @@ const playGame = async () => {
     const config = {
       autoPlay: true,
       maxGamesInRow: 6,
-      greenColor: [208, 216, 0],
+      greenColor: [226, 122, 52],
       whiteColor: [255, 255, 255],
       bombColor: [126, 119, 121],
       flowerTolerance: 9,
