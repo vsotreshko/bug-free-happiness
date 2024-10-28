@@ -293,32 +293,33 @@ const resolveTasks = async (document) => {
 
   await delay(getRandomInt(3000, 5000)); // Wait page for load
 
-  const weekly = await waitForElement(
-    document,
-    "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div > div.footer > button"
-  );
+  // TODO: Commented weekly tasks
+  // const weekly = await waitForElement(
+  //   document,
+  //   "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div > div.footer > button"
+  // );
 
-  if (weekly) {
-    weekly.click();
-    const weeklyPage = await waitForElement(
-      document,
-      "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog"
-    ); // Get all task items
-    if (weeklyPage) {
-      const weeklyTaskItems = weeklyPage.querySelectorAll(".pages-tasks-list-item-label"); // Get all task items
-      await iterateOverTaskItems(weeklyTaskItems, "start"); // Start all
-      await iterateOverTaskItems(weeklyTaskItems, "verify"); // Verify if needed
-      await iterateOverTaskItems(weeklyTaskItems, "claim"); // Claim all
-    }
+  // if (weekly) {
+  //   weekly.click();
+  //   const weeklyPage = await waitForElement(
+  //     document,
+  //     "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog"
+  //   ); // Get all task items
+  //   if (weeklyPage) {
+  //     const weeklyTaskItems = weeklyPage.querySelectorAll(".pages-tasks-list-item-label"); // Get all task items
+  //     await iterateOverTaskItems(weeklyTaskItems, "start"); // Start all
+  //     await iterateOverTaskItems(weeklyTaskItems, "verify"); // Verify if needed
+  //     await iterateOverTaskItems(weeklyTaskItems, "claim"); // Claim all
+  //   }
 
-    const closeWeeklyButton = await waitForElement(
-      document,
-      "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog > div.header-with-banner > div > div.right-slot > button"
-    );
-    if (closeWeeklyButton) {
-      closeWeeklyButton.click();
-    }
-  }
+  //   const closeWeeklyButton = await waitForElement(
+  //     document,
+  //     "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog > div.header-with-banner > div > div.right-slot > button"
+  //   );
+  //   if (closeWeeklyButton) {
+  //     closeWeeklyButton.click();
+  //   }
+  // }
 
   const tabSelectors = [
     "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(2) > span", // New
