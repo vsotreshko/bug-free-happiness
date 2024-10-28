@@ -238,28 +238,20 @@ const init = async () => {
     //   window.location.reload();
     // }
 
-    const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
-
-    if (hasNotPixel) {
-      await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
-      await delay(2 * 60 * 1000); // Wait 5 min to play
-      await clickBrowserHeaderButton(document); // Close NotPixel
-      await delay(5000); // Wait window to close
-      window.location.reload();
-    }
+    await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
+    await delay(2 * 60 * 1000); // Wait 5 min to play
+    await clickBrowserHeaderButton(document); // Close NotPixel
+    await delay(5000); // Wait window to close
+    window.location.reload();
   }
 
   // 00:00 -> 06:00
   if (isLaterThan(0) && isEarlierThan(6)) {
-    const hasNotPixel = await waitForElement(document, 'a[href="#7249432100"]');
-
-    if (hasNotPixel) {
-      await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
-      await delay(2 * 60 * 1000); // Wait 5 min to play
-      await clickBrowserHeaderButton(document); // Close NotPixel
-      await delay(5000); // Wait window to close
-      window.location.reload();
-    }
+    await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
+    await delay(2 * 60 * 1000); // Wait 5 min to play
+    await clickBrowserHeaderButton(document); // Close NotPixel
+    await delay(5000); // Wait window to close
+    window.location.reload();
   }
 
   // await launchBot(window, document, "major", "7487372978", "Major");
