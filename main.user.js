@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      5.7
+// @version      5.8
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -223,6 +223,10 @@ const iterateOverTaskItems = async (taskItems, action) => {
     { title: "how to find altcoins?", code: "ULTRABLUM" },
     { title: "crypto slang. part 1", code: "BLUMSTORM" },
     { title: "bitcoin rainbow chart?", code: "SOBLUM" },
+    { title: "pumptober special", code: "PUMPIT" },
+    { title: "what is on-chain analysis?", code: "BLUMEXTRA" },
+    { title: "crypto slang. part 1", code: "BLUMSTORM" },
+    { title: "how to find altcoins?", code: "ULTRABLUM" },
   ];
 
   if (action === "start" || action === "claim") {
@@ -349,33 +353,33 @@ const init = async () => {
   }
   // await resolveTasks(document);
 
-  // // Open Frens tab
-  // const frensTab = await waitForElement(document, 'a[href*="/frens"]');
-  // if (frensTab) {
-  //   frensTab.click();
-  // }
-  // await delay(getRandomInt(3000, 5000)); // Wait after click
+  // Open Frens tab
+  const frensTab = await waitForElement(document, 'a[href*="/frens"]');
+  if (frensTab) {
+    frensTab.click();
+  }
+  await delay(getRandomInt(3000, 5000)); // Wait after click
 
-  // // Claim frens
-  // const frensClaim = await waitForElement(document, "button.claim-button", 2000);
-  // if (frensClaim) {
-  //   await delay(getRandomInt(3000, 5000));
-  //   frensClaim.click();
-  // }
-  // await delay(getRandomInt(3000, 5000)); // Wait after click
+  // Claim frens
+  const frensClaim = await waitForElement(document, "button.claim-button", 2000);
+  if (frensClaim) {
+    await delay(getRandomInt(3000, 5000));
+    frensClaim.click();
+  }
+  await delay(getRandomInt(3000, 5000)); // Wait after click
 
-  // // Open Home tab
-  // const homeTab = await waitForElement(document, 'a[href*="/"]');
-  // if (homeTab) {
-  //   homeTab.click();
-  // }
-  // await delay(getRandomInt(3000, 5000)); // Wait after click
+  // Open Home tab
+  const homeTab = await waitForElement(document, 'a[href*="/"]');
+  if (homeTab) {
+    homeTab.click();
+  }
+  await delay(getRandomInt(3000, 5000)); // Wait after click
 
-  // // Claim / Continue / Start
-  // const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
-  // if (startFarming) {
-  //   startFarming.click();
-  // }
+  // Claim / Continue / Start
+  const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
+  if (startFarming) {
+    startFarming.click();
+  }
 
   playGame();
 };
