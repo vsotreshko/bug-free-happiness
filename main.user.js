@@ -339,7 +339,7 @@ const resolveTasks = async (document) => {
 
 const init = async () => {
   // Find "Continue" button
-  const continueButton = await waitForElement(document, "button.kit-button.is-large.is-fill", 2000);
+  const continueButton = await waitForElement(document, "button.kit-button.is-large.is-fill", 3000);
   if (continueButton) {
     await delay(getRandomInt(3000, 5000));
     continueButton.click();
