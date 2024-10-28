@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      5.8
+// @version      5.9
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -151,6 +151,7 @@ const playGame = async () => {
             isColorSuits(r, g, b, config.bombColor, config.bombTolerance) &&
             checkSurroundingPixels(pixels, width, height, x, y, config.bombColor, config.bombTolerance)
           ) {
+            simulateClick(canvas, x, y);
             loopShouldWork = false;
             break;
           }
