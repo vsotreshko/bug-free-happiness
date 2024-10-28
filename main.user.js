@@ -351,7 +351,8 @@ const init = async () => {
     await delay(getRandomInt(3000, 5000));
     claimButton.click();
   }
-  // await resolveTasks(document);
+
+  await resolveTasks(document);
 
   // Open Frens tab
   const frensTab = await waitForElement(document, 'a[href*="/frens"]');
