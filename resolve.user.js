@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.6
+// @version     3.7
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -289,12 +289,14 @@ const resolveHaloween = async (document, canvas) => {
   const haloweenSkill = await waitForElement(document, haloweenSkillSelector);
   simulateClick(haloweenSkill);
 
-  await delay(1000);
+  for (let i = 0; i < 6; i++) {
+    await delay(1000);
 
-  simulatePointerEvents(canvas, canvas.width * 0.1, canvas.height * 0.1, canvas.width * 0.1, canvas.height * 0.1);
+    simulatePointerEvents(canvas, canvas.width * 0.1, canvas.height * 0.1, canvas.width * 0.1, canvas.height * 0.1);
 
-  simulateClickHaloween(canvas);
-  console.log("Clicked on haloween skill");
+    simulateClickHaloween(canvas);
+    console.log("Clicked on haloween skill");
+  }
 };
 
 const resolveHaloweenModal = async (document) => {
@@ -359,11 +361,6 @@ const init = async () => {
 
   const canPaintCount = await getCanPaintCount(document);
 
-  await resolveHaloween(document, canvas);
-  await resolveHaloween(document, canvas);
-  await resolveHaloween(document, canvas);
-  await resolveHaloween(document, canvas);
-  await resolveHaloween(document, canvas);
   await resolveHaloween(document, canvas);
 
   if (canPaintCount > 1) {
