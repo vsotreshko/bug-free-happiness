@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.5
+// @version     3.6
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -242,7 +242,7 @@ const clickByCoof = async (canvas, x, y) => {
 };
 
 const changeCursorPositionOnCanvas = async (canvas) => {
-  const quarter = getRandomInt(10, 15) / 100; // (20 - 30)
+  const quarter = getRandomInt(20, 30) / 100; // (20 - 30)
   await clickByCoof(canvas, quarter, quarter);
 };
 
