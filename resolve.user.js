@@ -122,6 +122,38 @@ const simulateClickX = (button) => {
   });
 };
 
+const simulateClickHaloween = (button) => {
+  const events = [
+    new PointerEvent("pointerdown", {
+      bubbles: true,
+      cancelable: true,
+      isTrusted: true,
+      pointerId: 1,
+      width: 1,
+      height: 1,
+      pressure: 0.5,
+      pointerType: "touch",
+    }),
+    new MouseEvent("mousedown", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
+    new PointerEvent("pointerup", {
+      bubbles: true,
+      cancelable: true,
+      isTrusted: true,
+      pointerId: 1,
+      width: 1,
+      height: 1,
+      pressure: 0,
+      pointerType: "touch",
+    }),
+    new MouseEvent("mouseup", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
+    new PointerEvent("click", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
+  ];
+
+  events.forEach((event, index) => {
+    setTimeout(() => button.dispatchEvent(event), index * 100);
+  });
+};
+
 const waitForElement = async (document, selector, timeout = 10000) => {
   console.warn(`Waiting for: ${selector}`);
   return new Promise((resolve, reject) => {
@@ -170,13 +202,14 @@ function simulatePointerEvents(element, startX, startY, endX, endY) {
 }
 
 const clickPaintButton = async (document) => {
-  const paintButton = await waitForElement(document, "#root > div > div:nth-child(7) > div > button > span");
+  const paintButton = await waitForElement(document, "#root > div > div._order_panel_lwgvy_1 > div > button > span");
   simulateClickX(paintButton);
 };
 
 const findColors = async (document) => {
   // Click on the active color
-  const activeColorSelector = "#root > div > div:nth-child(7) > div > div:nth-child(2) > div:nth-child(1)";
+  const activeColorSelector =
+    "#root > div > div._order_panel_lwgvy_1 > div > div._info_lwgvy_42 > div._active_color_lwgvy_51";
   const activeColor = await waitForElement(document, activeColorSelector);
   simulateClickX(activeColor);
 
@@ -184,15 +217,16 @@ const findColors = async (document) => {
   await delay(1000);
 
   // Get palette colors
-  const paletteSelector = "#root > div > div:nth-child(7) > div > div:nth-child(3) > div > div:nth-child(2)";
+  const paletteSelector =
+    "#root > div > div._order_panel_lwgvy_1 > div > div._expandable_panel_layout_1v9vd_1 > div > div._color_line_epppt_15";
   const palette = await waitForElement(document, paletteSelector);
 
   const colors = [];
 
   for (const child of palette.children) {
-    if (child.style.backgroundColor === "rgb(109, 72, 47)") {
-      colors.push(child);
-    }
+    // if (child.style.backgroundColor === "rgb(109, 72, 47)") {
+    //   colors.push(child);
+    // }
 
     if (child.style.backgroundColor === "rgb(0, 0, 0)") {
       colors.push(child);
@@ -208,7 +242,7 @@ const clickByCoof = async (canvas, x, y) => {
 };
 
 const changeCursorPositionOnCanvas = async (canvas) => {
-  const quarter = getRandomInt(20, 30) / 100; // (20 - 30)
+  const quarter = getRandomInt(10, 15) / 100; // (20 - 30)
   await clickByCoof(canvas, quarter, quarter);
 };
 
@@ -226,7 +260,7 @@ const selectBlumTemplate = async (document) => {
 
 const getCanPaintCount = async (document) => {
   const canPaintCountSelector =
-    "#root > div > div:nth-child(7) > div > button > div:nth-child(1) > div > div:nth-child(2) > span:nth-child(2)";
+    "#root > div > div:nth-child(8) > div > button > div:nth-child(1) > div > div:nth-child(2) > span:nth-child(2)";
   const canPaintCountElement = await waitForElement(document, canPaintCountSelector);
   return parseInt(canPaintCountElement.textContent);
 };
@@ -238,7 +272,8 @@ const autoClaimReward = async (document) => {
 
   await delay(1000);
 
-  const claimButtonSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(4) > button";
+  const claimButtonSelector =
+    "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._container_13oyr_1 > button";
   const claimButton = await waitForElement(document, claimButtonSelector);
   simulateClick(claimButton);
 
@@ -249,11 +284,44 @@ const autoClaimReward = async (document) => {
   simulateClick(backButton);
 };
 
+const resolveHaloween = async (document, canvas) => {
+  const haloweenSkillSelector = "#root > div > div._layout_1xfz6_1 > div > button:nth-child(3)";
+  const haloweenSkill = await waitForElement(document, haloweenSkillSelector);
+  simulateClick(haloweenSkill);
+
+  await delay(1000);
+
+  simulatePointerEvents(canvas, canvas.width * 0.1, canvas.height * 0.1, canvas.width * 0.1, canvas.height * 0.1);
+
+  simulateClickHaloween(canvas);
+  console.log("Clicked on haloween skill");
+};
+
+const resolveHaloweenModal = async (document) => {
+  const letsGoSelector = "#root > div > div._layout_16huv_1 > div > div > div._footer_11ui8_136 > button";
+  const letsGo = await waitForElement(document, letsGoSelector);
+
+  if (letsGo) {
+    simulateClick(letsGo);
+
+    const claimSelector =
+      "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._info_layout_bt2qf_1 > div > div:nth-child(3) > div";
+    const claim = await waitForElement(document, claimSelector);
+    simulateClick(claim);
+
+    const backButtonSelector = "#root > div > div:nth-child(2) > button";
+    const backButton = await waitForElement(document, backButtonSelector);
+    simulateClick(backButton);
+  }
+};
+
 const init = async () => {
   console.log("NotPixel Running...");
 
   // Wait for the page to load
   await delay(3000);
+
+  await resolveHaloweenModal(document);
 
   let res = await selectBlumTemplate(document);
   if (!res) {
@@ -291,8 +359,15 @@ const init = async () => {
 
   const canPaintCount = await getCanPaintCount(document);
 
+  await resolveHaloween(document, canvas);
+  await resolveHaloween(document, canvas);
+  await resolveHaloween(document, canvas);
+  await resolveHaloween(document, canvas);
+  await resolveHaloween(document, canvas);
+  await resolveHaloween(document, canvas);
+
   if (canPaintCount > 1) {
-    for (let i = 0; i < Math.floor(canPaintCount / 2); i++) {
+    for (let i = 0; i < canPaintCount; i++) {
       await delay(1000);
       await changeCursorPositionOnCanvas(canvas);
       const colors = await findColors(document);
