@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.7
+// @version     3.8
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -224,9 +224,9 @@ const findColors = async (document) => {
   const colors = [];
 
   for (const child of palette.children) {
-    // if (child.style.backgroundColor === "rgb(109, 72, 47)") {
-    //   colors.push(child);
-    // }
+    if (child.style.backgroundColor === "rgb(109, 72, 47)") {
+      colors.push(child);
+    }
 
     if (child.style.backgroundColor === "rgb(0, 0, 0)") {
       colors.push(child);
@@ -284,46 +284,11 @@ const autoClaimReward = async (document) => {
   simulateClick(backButton);
 };
 
-const resolveHaloween = async (document, canvas) => {
-  const haloweenSkillSelector = "#root > div > div._layout_1xfz6_1 > div > button:nth-child(3)";
-  const haloweenSkill = await waitForElement(document, haloweenSkillSelector);
-  simulateClick(haloweenSkill);
-
-  for (let i = 0; i < 6; i++) {
-    await delay(1000);
-
-    simulatePointerEvents(canvas, canvas.width * 0.1, canvas.height * 0.1, canvas.width * 0.1, canvas.height * 0.1);
-
-    simulateClickHaloween(canvas);
-    console.log("Clicked on haloween skill");
-  }
-};
-
-const resolveHaloweenModal = async (document) => {
-  const letsGoSelector = "#root > div > div._layout_16huv_1 > div > div > div._footer_11ui8_136 > button";
-  const letsGo = await waitForElement(document, letsGoSelector);
-
-  if (letsGo) {
-    simulateClick(letsGo);
-
-    const claimSelector =
-      "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._info_layout_bt2qf_1 > div > div:nth-child(3) > div";
-    const claim = await waitForElement(document, claimSelector);
-    simulateClick(claim);
-
-    const backButtonSelector = "#root > div > div:nth-child(2) > button";
-    const backButton = await waitForElement(document, backButtonSelector);
-    simulateClick(backButton);
-  }
-};
-
 const init = async () => {
   console.log("NotPixel Running...");
 
   // Wait for the page to load
   await delay(3000);
-
-  await resolveHaloweenModal(document);
 
   let res = await selectBlumTemplate(document);
   if (!res) {
@@ -360,8 +325,6 @@ const init = async () => {
   await delay(1000);
 
   const canPaintCount = await getCanPaintCount(document);
-
-  await resolveHaloween(document, canvas);
 
   if (canPaintCount > 1) {
     for (let i = 0; i < canPaintCount; i++) {
