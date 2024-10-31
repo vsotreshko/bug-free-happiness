@@ -383,8 +383,7 @@ const init = async () => {
   if (startFarming) {
     startFarming.click();
   }
-
-  playGame();
+  // playGame();
 };
 
 init();
