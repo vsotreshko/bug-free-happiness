@@ -292,9 +292,20 @@ const resolveTasks = async (document) => {
   const taskButton = await waitForElement(document, taskRowSelector);
   simulateClick(taskButton);
 
-  console.log("Task resolved");
+  await delay(1000);
+
+  const symbolTaskSelector =
+    "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._info_layout_bt2qf_1 > div > div:nth-child(9) > div";
+  const symbolTask = await waitForElement(document, symbolTaskSelector);
+  simulateClick(symbolTask);
 
   await delay(1000);
+
+  const checkButtonSelector = "body > div._popup_1ub07_11 > div > div:nth-child(4) > button";
+  const checkButton = await waitForElement(document, checkButtonSelector);
+  simulateClick(checkButton);
+
+  console.log("Task resolved");
 };
 
 const init = async () => {
