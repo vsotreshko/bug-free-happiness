@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     3.9
+// @version     4.0
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -265,7 +265,7 @@ const getCanPaintCount = async (document) => {
   return parseInt(canPaintCountElement.textContent);
 };
 
-const autoClaimReward = async (document) => {
+const autoClaimReward = async (document, toClose = true) => {
   const claimMenuButtonSelector = "#root > div > div:nth-child(1) > div > div:nth-child(2) > div:nth-child(2) > button";
   const claimMenuButton = await waitForElement(document, claimMenuButtonSelector);
   simulateClick(claimMenuButton);
@@ -279,9 +279,22 @@ const autoClaimReward = async (document) => {
 
   await delay(1000);
 
-  const backButtonSelector = "#root > div > div:nth-child(2) > button";
-  const backButton = await waitForElement(document, backButtonSelector);
-  simulateClick(backButton);
+  if (toClose) {
+    const backButtonSelector = "#root > div > div:nth-child(2) > button";
+    const backButton = await waitForElement(document, backButtonSelector);
+    simulateClick(backButton);
+  }
+};
+
+const resolveTasks = async (document) => {
+  const taskRowSelector =
+    "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._info_layout_bt2qf_1 > div > div:nth-child(1) > div";
+  const taskButton = await waitForElement(document, taskRowSelector);
+  simulateClick(taskButton);
+
+  console.log("Task resolved");
+
+  await delay(1000);
 };
 
 const init = async () => {
@@ -341,7 +354,9 @@ const init = async () => {
     }
   }
 
-  await autoClaimReward(document);
+  await autoClaimReward(document, false);
+
+  await resolveTasks(document);
 };
 
 init();
