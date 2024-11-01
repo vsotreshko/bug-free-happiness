@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.2
+// @version     5.3
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -220,43 +220,60 @@ const addSymbolToTheName = async (document) => {
 
   const burgerSelector = "#LeftMainHeader > div.DropdownMenu.main-menu > button";
   const burger = await waitForElement(document, burgerSelector);
+  if (!burger) {
+    return;
+  }
   simulateClick(burger);
 
   await delay(1000);
 
-  const settingsMenuItemsSelector =
-    "#LeftMainHeader > div.DropdownMenu.main-menu > div > div.bubble.menu-container.custom-scroll.with-footer.opacity-transition.fast.shown.left.top.open > div:nth-child(5)";
-  const settingsMenuItems = await waitForElement(document, settingsMenuItemsSelector);
-  simulateClick(settingsMenuItems);
-
-  await delay(1000);
-
-  const editButtonSelector =
-    "#Settings > div.Transition_slide.Transition_slide-active > div.left-header > div > button";
-  const editButton = await waitForElement(document, editButtonSelector);
-  simulateClick(editButton);
-
-  await delay(1000);
-
-  const input = await waitForElement(
-    document,
-    "#Settings > div.Transition_slide.Transition_slide-active > div.settings-fab-wrapper > div > div.settings-edit-profile.settings-item > div:nth-child(3) > input"
-  );
-
-  if (input.value.includes(symbol)) {
+  const menuContainerSelector =
+    "#LeftMainHeader > div.DropdownMenu.main-menu > div > div.bubble.menu-container.custom-scroll.with-footer.opacity-transition.fast.left.top.shown.open";
+  const menuContainer = await waitForElement(document, menuContainerSelector);
+  if (!menuContainer) {
     return;
   }
 
-  input.value = input.value + symbol;
+  for (const item of menuContainer.children) {
+    if (item.textContent.includes("Settings")) {
+      simulateClick(item);
 
-  input.dispatchEvent(new Event("input", { bubbles: true }));
+      await delay(1000);
 
-  await delay(1000);
+      const editButtonSelector =
+        "#Settings > div.Transition_slide.Transition_slide-active > div.left-header > div > button";
+      const editButton = await waitForElement(document, editButtonSelector);
+      if (!editButton) {
+        return;
+      }
+      simulateClick(editButton);
 
-  const saveButtonSelector =
-    "#Settings > div.Transition_slide.Transition_slide-active > div.settings-fab-wrapper > button";
-  const saveButton = await waitForElement(document, saveButtonSelector);
-  simulateClick(saveButton);
+      await delay(1000);
+
+      const input = await waitForElement(
+        document,
+        "#Settings > div.Transition_slide.Transition_slide-active > div.settings-fab-wrapper > div > div.settings-edit-profile.settings-item > div:nth-child(3) > input"
+      );
+
+      if (!input || input.value.includes(symbol)) {
+        return;
+      }
+
+      input.value = input.value + symbol;
+
+      input.dispatchEvent(new Event("input", { bubbles: true }));
+
+      await delay(1000);
+
+      const saveButtonSelector =
+        "#Settings > div.Transition_slide.Transition_slide-active > div.settings-fab-wrapper > button";
+      const saveButton = await waitForElement(document, saveButtonSelector);
+      if (!saveButton) {
+        return;
+      }
+      simulateClick(saveButton);
+    }
+  }
 };
 
 const init = async () => {
