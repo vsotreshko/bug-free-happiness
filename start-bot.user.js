@@ -215,6 +215,50 @@ function isLaterThan(hour) {
 
 /** ------------------------------------------------------------------------------- */
 
+const addSymbolToTheName = async (document) => {
+  const symbol = "▪️";
+
+  const burgerSelector = "#LeftMainHeader > div.DropdownMenu.main-menu > button";
+  const burger = await waitForElement(document, burgerSelector);
+  simulateClick(burger);
+
+  await delay(1000);
+
+  const settingsMenuItemsSelector =
+    "#LeftMainHeader > div.DropdownMenu.main-menu > div > div.bubble.menu-container.custom-scroll.with-footer.opacity-transition.fast.shown.left.top.open > div:nth-child(5)";
+  const settingsMenuItems = await waitForElement(document, settingsMenuItemsSelector);
+  simulateClick(settingsMenuItems);
+
+  await delay(1000);
+
+  const editButtonSelector =
+    "#Settings > div.Transition_slide.Transition_slide-active > div.left-header > div > button";
+  const editButton = await waitForElement(document, editButtonSelector);
+  simulateClick(editButton);
+
+  await delay(1000);
+
+  const input = await waitForElement(
+    document,
+    "#Settings > div.Transition_slide.Transition_slide-active > div.settings-fab-wrapper > div > div.settings-edit-profile.settings-item > div:nth-child(3) > input"
+  );
+
+  if (input.value.includes(symbol)) {
+    return;
+  }
+
+  input.value = input.value + symbol;
+
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+
+  await delay(1000);
+
+  const saveButtonSelector =
+    "#Settings > div.Transition_slide.Transition_slide-active > div.settings-fab-wrapper > button";
+  const saveButton = await waitForElement(document, saveButtonSelector);
+  simulateClick(saveButton);
+};
+
 const init = async () => {
   window.onclick = (e) => {
     console.log(e.target); // to get the element
@@ -222,6 +266,8 @@ const init = async () => {
   };
 
   await delay(5000); // Wait for window to load
+
+  await addSymbolToTheName(document);
 
   // 06:00 -> 09:00 or 18:00 -> 21:00
   if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(21))) {
