@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.4
+// @version     5.5
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -215,9 +215,7 @@ function isLaterThan(hour) {
 
 /** ------------------------------------------------------------------------------- */
 
-const addSymbolToTheName = async (document) => {
-  const symbol = "▪️";
-
+const addSymbolToTheName = async (document, symbol) => {
   const burgerSelector = "#LeftMainHeader > div.DropdownMenu.main-menu > button";
   const burger = await waitForElement(document, burgerSelector);
   if (!burger) {
@@ -284,7 +282,7 @@ const init = async () => {
 
   await delay(5000); // Wait for window to load
 
-  // await addSymbolToTheName(document);
+  await addSymbolToTheName(document, "🐾");
 
   // 06:00 -> 09:00 or 18:00 -> 21:00
   if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(21))) {
