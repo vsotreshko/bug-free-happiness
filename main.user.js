@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      5.9
+// @version      6.0
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -64,7 +64,8 @@ const playGame = async () => {
     const config = {
       autoPlay: true,
       maxGamesInRow: 6,
-      greenColor: [226, 122, 52],
+      orangeColor: [226, 122, 52],
+      greenColor: [208, 216, 0],
       whiteColor: [255, 255, 255],
       bombColor: [126, 119, 121],
       flowerTolerance: 9,
@@ -159,6 +160,18 @@ const playGame = async () => {
           if (
             isColorSuits(r, g, b, config.greenColor, config.flowerTolerance) &&
             checkSurroundingPixels(pixels, width, height, x, y, config.greenColor, config.flowerTolerance)
+          ) {
+            executeWithProbability(() => {
+              simulateClick(canvas, x, y);
+            }, config.flowerClickProbability);
+
+            loopShouldWork = false;
+            break;
+          }
+
+          if (
+            isColorSuits(r, g, b, config.orangeColor, config.flowerTolerance) &&
+            checkSurroundingPixels(pixels, width, height, x, y, config.orangeColor, config.flowerTolerance)
           ) {
             executeWithProbability(() => {
               simulateClick(canvas, x, y);
@@ -354,7 +367,7 @@ const init = async () => {
     claimButton.click();
   }
 
-  await resolveTasks(document);
+  // await resolveTasks(document);
 
   // Open Frens tab
   const frensTab = await waitForElement(document, 'a[href*="/frens"]');
@@ -383,7 +396,7 @@ const init = async () => {
   if (startFarming) {
     startFarming.click();
   }
-  // playGame();
+  playGame();
 };
 
 init();
