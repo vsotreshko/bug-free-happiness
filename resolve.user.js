@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.1
+// @version     4.2
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*paws.community/*
@@ -42,7 +42,7 @@ const waitForElement = async (document, selector) => {
 };
 
 const iterateOverTasks = async (document) => {
-  const dontResolve = ["connect wallet", "invite 10 friends", "boost paws channel"];
+  const dontResolve = ["connect wallet", "invite 10 friends", "boost paws channel", "follow channel"];
 
   const questsListSelector =
     "#next-app > div.main-page-con > div.main-content-container.is-show > div.main-content-wrapper > div.quests-tab-con.is-show > div > div.section-items-con.quests";
