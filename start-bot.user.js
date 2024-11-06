@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.5
+// @version     5.6
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -103,7 +103,7 @@ const launchBot = async (window, document, kBotName, aBotName, botTitle) => {
     ),
   ]);
 
-  if (currentBotTitle && currentBotTitle.textContent === botTitle) {
+  if (currentBotTitle && currentBotTitle.textContent.trim().toLowerCase() === botTitle.trim().toLowerCase()) {
     console.log("Bot title found");
   } else {
     const currentUrl = window.location.href;
@@ -288,11 +288,8 @@ const init = async () => {
   if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(21))) {
     await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
   } else {
-    await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
-    await delay(2 * 60 * 1000); // Wait 5 min to play
-    await clickBrowserHeaderButton(document); // Close NotPixel
-    await delay(5000); // Wait window to close
-    window.location.reload();
+    // await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
+    await launchBot(window, document, "PAWSOG_bot", "7200992513", "Paws");
   }
 };
 
