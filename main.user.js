@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.0
+// @version      6.1
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -241,6 +241,9 @@ const iterateOverTaskItems = async (taskItems, action) => {
     { title: "what is on-chain analysis?", code: "BLUMEXTRA" },
     { title: "crypto slang. part 1", code: "BLUMSTORM" },
     { title: "how to find altcoins?", code: "ULTRABLUM" },
+    { title: "choosing a crypto exchange", code: "CRYPTOZONE" },
+    { title: "crypto slang. part 2", code: "FOMOOO" },
+    { title: "defi risks: key insights", code: "BLUMHELPS" },
   ];
 
   if (action === "start" || action === "claim") {
@@ -297,6 +300,40 @@ const iterateOverTaskItems = async (taskItems, action) => {
   }
 };
 
+const claimProof = async (document) => {
+  const buttonSelector =
+    "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div:nth-child(1) > div > div.footer > button";
+  const button = await waitForElement(document, buttonSelector);
+  button.click();
+};
+
+const processWeeklyTasks = async (document) => {
+  const weekly = await waitForElement(
+    document,
+    "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div > div.footer > button"
+  );
+  if (weekly) {
+    weekly.click();
+    const weeklyPage = await waitForElement(
+      document,
+      "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog"
+    ); // Get all task items
+    if (weeklyPage) {
+      const weeklyTaskItems = weeklyPage.querySelectorAll(".pages-tasks-list-item-label"); // Get all task items
+      await iterateOverTaskItems(weeklyTaskItems, "start"); // Start all
+      await iterateOverTaskItems(weeklyTaskItems, "verify"); // Verify if needed
+      await iterateOverTaskItems(weeklyTaskItems, "claim"); // Claim all
+    }
+    const closeWeeklyButton = await waitForElement(
+      document,
+      "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog > div.header-with-banner > div > div.right-slot > button"
+    );
+    if (closeWeeklyButton) {
+      closeWeeklyButton.click();
+    }
+  }
+};
+
 const resolveTasks = async (document) => {
   // Open Tasks tab
   const tasksTab = await waitForElement(document, 'a[href*="/tasks"]');
@@ -307,33 +344,7 @@ const resolveTasks = async (document) => {
 
   await delay(getRandomInt(3000, 5000)); // Wait page for load
 
-  // TODO: Commented weekly tasks
-  // const weekly = await waitForElement(
-  //   document,
-  //   "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div > div.footer > button"
-  // );
-
-  // if (weekly) {
-  //   weekly.click();
-  //   const weeklyPage = await waitForElement(
-  //     document,
-  //     "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog"
-  //   ); // Get all task items
-  //   if (weeklyPage) {
-  //     const weeklyTaskItems = weeklyPage.querySelectorAll(".pages-tasks-list-item-label"); // Get all task items
-  //     await iterateOverTaskItems(weeklyTaskItems, "start"); // Start all
-  //     await iterateOverTaskItems(weeklyTaskItems, "verify"); // Verify if needed
-  //     await iterateOverTaskItems(weeklyTaskItems, "claim"); // Claim all
-  //   }
-
-  //   const closeWeeklyButton = await waitForElement(
-  //     document,
-  //     "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog > div.header-with-banner > div > div.right-slot > button"
-  //   );
-  //   if (closeWeeklyButton) {
-  //     closeWeeklyButton.click();
-  //   }
-  // }
+  await claimProof(document);
 
   const tabSelectors = [
     "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(2) > span", // New
@@ -341,6 +352,7 @@ const resolveTasks = async (document) => {
     // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(4) > span", // Socials
     "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(5) > span", // Academy
   ];
+
   for (const tabSelector of tabSelectors) {
     const tab = document.querySelector(tabSelector);
     tab.click();
@@ -367,7 +379,7 @@ const init = async () => {
     claimButton.click();
   }
 
-  // await resolveTasks(document);
+  await resolveTasks(document);
 
   // Open Frens tab
   const frensTab = await waitForElement(document, 'a[href*="/frens"]');
@@ -396,7 +408,8 @@ const init = async () => {
   if (startFarming) {
     startFarming.click();
   }
-  playGame();
+
+  // playGame();
 };
 
 init();
