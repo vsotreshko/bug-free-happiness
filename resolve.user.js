@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.3
+// @version     4.4
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -20,12 +20,16 @@ const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
-const simulateClick = (button) => {
-  // // Simulate a real mouse click on the launchBotButton
-  // const rect = button.getBoundingClientRect();
-  // const centerX = rect.left + rect.width / 2 + getRandomInt(-5, 5);
-  // const centerY = rect.top + rect.height / 2 + getRandomInt(-5, 5);
+const simulateClickIfExist = async (name, selector) => {
+  const claimButton = await waitForElement(document, selector);
+  if (claimButton) {
+    simulateClick(claimButton);
+  } else {
+    console.error(`${name} wasn't found`);
+  }
+};
 
+const simulateClick = (button) => {
   const events = [
     new PointerEvent("pointerdown", {
       bubbles: true,
@@ -266,27 +270,27 @@ const getCanPaintCount = async (document) => {
 };
 
 const autoClaimReward = async (document, toClose = true) => {
-  const claimMenuButtonSelector = "#root > div > div:nth-child(1) > div > div:nth-child(2) > div:nth-child(2) > button";
-  const claimMenuButton = await waitForElement(document, claimMenuButtonSelector);
-  simulateClick(claimMenuButton);
+  await simulateClickIfExist(
+    "claimMenuButton",
+    "#root > div > div:nth-child(1) > div > div:nth-child(2) > div:nth-child(2) > button"
+  );
 
   await delay(1000);
 
-  const claimButtonSelector =
-    "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._container_13oyr_1 > button";
-  const claimButton = await waitForElement(document, claimButtonSelector);
-  simulateClick(claimButton);
+  await simulateClickIfExist(
+    "claimButton",
+    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._container_13oyr_1 > button"
+  );
 
   await delay(1000);
 
   if (toClose) {
-    const backButtonSelector = "#root > div > div:nth-child(2) > button";
-    const backButton = await waitForElement(document, backButtonSelector);
-    simulateClick(backButton);
+    await simulateClickIfExist("backButton", "#root > div > div:nth-child(2) > button");
   }
 };
 
 const resolveTasks = async (document) => {
+  // TODO: NOT WORKING
   const taskRowSelector =
     "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._info_layout_bt2qf_1 > div > div:nth-child(1) > div";
   const taskButton = await waitForElement(document, taskRowSelector);
@@ -306,6 +310,18 @@ const resolveTasks = async (document) => {
   simulateClick(checkButton);
 
   console.log("Task resolved");
+};
+
+const resolveBoosts = async (document) => {
+  await simulateClickIfExist(
+    "boostsTab",
+    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._panel_1mia4_1 > div:nth-child(2)"
+  );
+
+  const paintRewardLevelSelector =
+    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div._group_v8prs_7 > div:nth-child(1) > div._content_container_8sbvi_21 > div > div._item_reward_container_8sbvi_40 > span._level_text_8sbvi_53";
+  const paintRewardLevel = await waitForElement(document, paintRewardLevelSelector);
+  console.log("paintRewardLevel", paintRewardLevel);
 };
 
 const init = async () => {
@@ -367,7 +383,7 @@ const init = async () => {
 
   await autoClaimReward(document, false);
 
-  await resolveTasks(document);
+  await resolveBoosts(document);
 };
 
 init();
