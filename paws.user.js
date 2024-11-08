@@ -74,8 +74,17 @@ const resolveEarn = async (document) => {
   await iterateOverTasks(document); // Check
   await iterateOverTasks(document); // Claim
 
-  const partnersTabSelector =
+  const inGameTabSelector =
     "#next-app > div.main-page-con > div.main-content-container.is-show > div.main-content-wrapper > div.quests-tab-con.is-show > div > div.type-select > div:nth-child(2)";
+  const inGameTab = await waitForElement(document, inGameTabSelector);
+  inGameTab.click();
+
+  await iterateOverTasks(document); // Start
+  await iterateOverTasks(document); // Check
+  await iterateOverTasks(document); // Claim
+
+  const partnersTabSelector =
+    "#next-app > div.main-page-con > div.main-content-container.is-show > div.main-content-wrapper > div.quests-tab-con.is-show > div > div.type-select > div:nth-child(3)";
   const partnersTab = await waitForElement(document, partnersTabSelector);
   partnersTab.click();
 
