@@ -5,7 +5,7 @@
 // @version     4.5
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
-// @match        *://*notpx.app/*
+// @match        *://*paws.community/*
 // @downloadURL  https://github.com/vsotreshko/bug-free-happiness/raw/main/resolve.user.js
 // @updateURL    https://github.com/vsotreshko/bug-free-happiness/raw/main/resolve.user.js
 // ==/UserScript==
