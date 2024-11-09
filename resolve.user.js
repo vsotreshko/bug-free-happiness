@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.5
+// @version     4.6
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*paws.community/*
