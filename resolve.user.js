@@ -2,10 +2,10 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.7
+// @version     4.8
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
-// @match        *://*paws.community/*
+// @match        *://*notpx.app/*
 // @downloadURL  https://github.com/vsotreshko/bug-free-happiness/raw/main/resolve.user.js
 // @updateURL    https://github.com/vsotreshko/bug-free-happiness/raw/main/resolve.user.js
 // ==/UserScript==
