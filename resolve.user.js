@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.9
+// @version     5.0
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -290,27 +290,13 @@ const autoClaimReward = async (document, toClose = true) => {
 
 const resolveTasks = async (document) => {
   // TODO: NOT WORKING
-  const taskRowSelector =
-    "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._info_layout_bt2qf_1 > div > div:nth-child(1) > div";
-  const taskButton = await waitForElement(document, taskRowSelector);
-  simulateClick(taskButton);
-
-  await delay(1000);
-
-  const symbolTaskSelector =
-    "#root > div > div._layout_4nkxd_1 > div._content_4nkxd_22 > div._info_layout_bt2qf_1 > div > div:nth-child(9) > div";
-  const symbolTask = await waitForElement(document, symbolTaskSelector);
-  simulateClick(symbolTask);
-
-  await delay(1000);
-
-  const checkButtonSelector = "body > div._popup_1ub07_11 > div > div:nth-child(4) > button";
-  const checkButton = await waitForElement(document, checkButtonSelector);
-  simulateClick(checkButton);
-
   const limeGameSelector =
     "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(1)";
   await simulateClickIfExist("limeGame", limeGameSelector);
+
+  const checkNameSelector =
+    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(8)";
+  await simulateClickIfExist("checkName", checkNameSelector);
 };
 
 const resolveBoosts = async (document) => {
