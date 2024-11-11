@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.0
+// @version     5.1
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -376,6 +376,10 @@ const init = async () => {
   }
 
   await autoClaimReward(document, false);
+
+  await resolveTasks(document);
+
+  await delay(2000);
 
   await resolveBoosts(document);
 };
