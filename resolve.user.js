@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     4.8
+// @version     4.9
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -263,7 +263,7 @@ const selectBlumTemplate = async (document) => {
 
 const getCanPaintCount = async (document) => {
   const canPaintCountSelector =
-    "#root > div > div:nth-child(8) > div > button > div:nth-child(1) > div > div:nth-child(2) > span:nth-child(2)";
+    "#root > div > div._order_panel_lwgvy_1 > div > button > div._layout_oxfjd_1 > div > div._counter_oxfjd_32 > span:nth-child(2)";
   const canPaintCountElement = await waitForElement(document, canPaintCountSelector);
   return parseInt(canPaintCountElement.textContent);
 };
@@ -308,7 +308,9 @@ const resolveTasks = async (document) => {
   const checkButton = await waitForElement(document, checkButtonSelector);
   simulateClick(checkButton);
 
-  console.log("Task resolved");
+  const limeGameSelector =
+    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(1)";
+  await simulateClickIfExist("limeGame", limeGameSelector);
 };
 
 const resolveBoosts = async (document) => {
@@ -323,11 +325,18 @@ const resolveBoosts = async (document) => {
   // console.log("paintRewardLevel", paintRewardLevel.textContent.trim().replace("lvl").toLowerCase());
 };
 
+const resolveWebVersionModal = async (document) => {
+  const webVersionModalSelector = "#root > div > div._layout_16huv_1 > div > div > div._footer_18915_112 > button";
+  await simulateClickIfExist("webVersionButton", webVersionModalSelector);
+};
+
 const init = async () => {
   console.log("NotPixel Running...");
 
   // Wait for the page to load
-  await delay(3000);
+  await delay(5000);
+
+  await resolveWebVersionModal(document);
 
   let res = await selectBlumTemplate(document);
   if (!res) {
