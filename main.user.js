@@ -10,6 +10,39 @@
 // @updateURL    https://github.com/vsotreshko/bug-free-happiness/raw/main/main.user.js
 // ==/UserScript==
 
+const verifyWithCodes = [
+  { title: "$2.5m+ dogs airdrop", code: "HAPPYDOGS" },
+  { title: "liquidity pools guide", code: "Blumersss" },
+  { title: "what are amms?", code: "CRYPTOSMART" },
+  { title: "say no to rug pull!", code: "SUPERBLUM" },
+  { title: "what are telegram mini apps?", code: "CRYPTOBLUM" },
+  { title: "navigating crypto", code: "HEYBLUM" },
+  { title: "secure your crypto!", code: "BEST PROJECT EVER" },
+  { title: "forks explained", code: "GO GET" },
+  { title: "how to analyze crypto?", code: "VALUE" },
+  { title: "doxxing? what's that?", code: "NODOXXING" },
+  // { title: "pre-market trading?", code: "WOWBLUM" }, // TODO: Not working
+  { title: "how to memecoin?", code: "MEMEBLUM" },
+  { title: "crypto terms. part 1", code: "BLUMEXPLORER" },
+  { title: "bitcoin rainbow chart", code: "SOBLUM" },
+  { title: "token burning: how & why?", code: "ONFIRE" },
+  { title: "how to trade perps?", code: "CRYPTOFAN" },
+  { title: "sharding explained", code: "BLUMTASTIC" },
+  { title: "defi explained", code: "BLUMFORCE" },
+  { title: "how to find altcoins?", code: "ULTRABLUM" },
+  { title: "crypto slang. part 1", code: "BLUMSTORM" },
+  { title: "bitcoin rainbow chart?", code: "SOBLUM" },
+  { title: "pumptober special", code: "PUMPIT" },
+  { title: "what is on-chain analysis?", code: "BLUMEXTRA" },
+  { title: "crypto slang. part 1", code: "BLUMSTORM" },
+  { title: "how to find altcoins?", code: "ULTRABLUM" },
+  { title: "choosing a crypto exchange", code: "CRYPTOZONE" },
+  { title: "crypto slang. part 2", code: "FOMOOO" },
+  { title: "defi risks: key insights", code: "BLUMHELPS" },
+  { title: "Understanding Gas Fees", code: "CRYPTOGAS" },
+  { title: "What's Crypto DEX?", code: "DEXXX" },
+  { title: "Node Sales in Crypto", code: "BLUMIFY" },
+];
 /** Custom functions -------------------------------------------------------------- */
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
 
@@ -215,37 +248,6 @@ const playGame = async () => {
 };
 
 const iterateOverTaskItems = async (taskItems, action) => {
-  const verifyWithCodes = [
-    { title: "$2.5m+ dogs airdrop", code: "HAPPYDOGS" },
-    { title: "liquidity pools guide", code: "Blumersss" },
-    { title: "what are amms?", code: "CRYPTOSMART" },
-    { title: "say no to rug pull!", code: "SUPERBLUM" },
-    { title: "what are telegram mini apps?", code: "CRYPTOBLUM" },
-    { title: "navigating crypto", code: "HEYBLUM" },
-    { title: "secure your crypto!", code: "BEST PROJECT EVER" },
-    { title: "forks explained", code: "GO GET" },
-    { title: "how to analyze crypto?", code: "VALUE" },
-    { title: "doxxing? what's that?", code: "NODOXXING" },
-    // { title: "pre-market trading?", code: "WOWBLUM" }, // TODO: Not working
-    { title: "how to memecoin?", code: "MEMEBLUM" },
-    { title: "crypto terms. part 1", code: "BLUMEXPLORER" },
-    { title: "bitcoin rainbow chart", code: "SOBLUM" },
-    { title: "token burning: how & why?", code: "ONFIRE" },
-    { title: "how to trade perps?", code: "CRYPTOFAN" },
-    { title: "sharding explained", code: "BLUMTASTIC" },
-    { title: "defi explained", code: "BLUMFORCE" },
-    { title: "how to find altcoins?", code: "ULTRABLUM" },
-    { title: "crypto slang. part 1", code: "BLUMSTORM" },
-    { title: "bitcoin rainbow chart?", code: "SOBLUM" },
-    { title: "pumptober special", code: "PUMPIT" },
-    { title: "what is on-chain analysis?", code: "BLUMEXTRA" },
-    { title: "crypto slang. part 1", code: "BLUMSTORM" },
-    { title: "how to find altcoins?", code: "ULTRABLUM" },
-    { title: "choosing a crypto exchange", code: "CRYPTOZONE" },
-    { title: "crypto slang. part 2", code: "FOMOOO" },
-    { title: "defi risks: key insights", code: "BLUMHELPS" },
-  ];
-
   if (action === "start" || action === "claim") {
     for (const taskItem of taskItems) {
       // Find and click the div with text "Start" inside the task item
@@ -263,10 +265,14 @@ const iterateOverTaskItems = async (taskItems, action) => {
       const startDiv = taskItem.querySelector("div.label");
 
       if (startDiv && startDiv.textContent.trim().toLowerCase() === "verify") {
+        console.log(taskItem);
+
         const title = taskItem.querySelector("div.title");
         const taskTitle = title?.textContent.trim().toLowerCase();
 
-        const verifyWithCode = verifyWithCodes.find((code) => code.title === taskTitle);
+        const verifyWithCode = verifyWithCodes.find(
+          (code) => code.title.trim().toLowerCase() === taskTitle.trim().toLowerCase()
+        );
 
         if (verifyWithCode) {
           startDiv.scrollIntoView();
@@ -278,7 +284,11 @@ const iterateOverTaskItems = async (taskItems, action) => {
               verifyPage,
               "div.pages-tasks-verify > div.heading > div.title"
             );
-            if (verifyPage && verifyPageTitle.textContent.trim().toLowerCase() === verifyWithCode.title) {
+            if (
+              verifyPage &&
+              verifyPageTitle.textContent.trim().toLowerCase() === verifyWithCode.title.trim().toLowerCase()
+            ) {
+              console.log(verifyPageTitle);
               const input = await waitForElement(verifyPage, "input[type=text]");
 
               await delay(getRandomInt(1000, 2000));
@@ -314,19 +324,18 @@ const processWeeklyTasks = async (document) => {
   );
   if (weekly) {
     weekly.click();
-    const weeklyPage = await waitForElement(
-      document,
-      "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog"
-    ); // Get all task items
+    const weeklyPage = await waitForElement(document, "body > div.kit-bottom-sheet > dialog"); // Get all task items
+
     if (weeklyPage) {
       const weeklyTaskItems = weeklyPage.querySelectorAll(".pages-tasks-list-item-label"); // Get all task items
       await iterateOverTaskItems(weeklyTaskItems, "start"); // Start all
       await iterateOverTaskItems(weeklyTaskItems, "verify"); // Verify if needed
       await iterateOverTaskItems(weeklyTaskItems, "claim"); // Claim all
     }
+
     const closeWeeklyButton = await waitForElement(
       document,
-      "#app > div.tasks-page.page > div.sections > div:nth-child(2) > div.pages-tasks-list.is-short-card > div > div.kit-bottom-sheet > dialog > div.header-with-banner > div > div.right-slot > button"
+      "body > div.kit-bottom-sheet > dialog > div.header-with-banner > div > div.right-slot > button"
     );
     if (closeWeeklyButton) {
       closeWeeklyButton.click();
@@ -344,13 +353,13 @@ const resolveTasks = async (document) => {
 
   await delay(getRandomInt(3000, 5000)); // Wait page for load
 
-  await claimProof(document);
+  // await claimProof(document);
 
   const tabSelectors = [
-    "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(2) > span", // New
+    "#app > div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs-inline.is-fully-left-scrolled > div.content > div > label:nth-child(2)", // New
     // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(3) > span", // OnChain
     // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(4) > span", // Socials
-    "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(5) > span", // Academy
+    "#app > div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs-inline.is-fully-left-scrolled > div.content > div > label:nth-child(5)", // Academy
   ];
 
   for (const tabSelector of tabSelectors) {
@@ -380,6 +389,8 @@ const init = async () => {
   }
 
   await resolveTasks(document);
+
+  await processWeeklyTasks(document);
 
   // Open Frens tab
   const frensTab = await waitForElement(document, 'a[href*="/frens"]');
