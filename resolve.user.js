@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.1
+// @version     5.2
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -205,14 +205,17 @@ function simulatePointerEvents(element, startX, startY, endX, endY) {
 }
 
 const clickPaintButton = async (document) => {
-  const paintButton = await waitForElement(document, "#root > div > div._order_panel_lwgvy_1 > div > button > span");
+  const paintButton = await waitForElement(
+    document,
+    "#root > div > div._layout_18yen_1 > div._order_panel_1e1fh_1 > div > button > span"
+  );
   simulateClickX(paintButton);
 };
 
 const findColors = async (document) => {
   // Click on the active color
   const activeColorSelector =
-    "#root > div > div._order_panel_lwgvy_1 > div > div._info_lwgvy_42 > div._active_color_lwgvy_51";
+    "#root > div > div._layout_18yen_1 > div._order_panel_1e1fh_1 > div > div._info_1e1fh_54 > div._active_color_1e1fh_63";
   const activeColor = await waitForElement(document, activeColorSelector);
   simulateClickX(activeColor);
 
@@ -221,7 +224,7 @@ const findColors = async (document) => {
 
   // Get palette colors
   const paletteSelector =
-    "#root > div > div._order_panel_lwgvy_1 > div > div._expandable_panel_layout_1v9vd_1 > div > div._color_line_epppt_15";
+    "#root > div > div._layout_18yen_1 > div._order_panel_1e1fh_1 > div > div._expandable_panel_layout_1v9vd_1 > div > div._color_line_epppt_15";
   const palette = await waitForElement(document, paletteSelector);
 
   const colors = [];
@@ -263,7 +266,7 @@ const selectBlumTemplate = async (document) => {
 
 const getCanPaintCount = async (document) => {
   const canPaintCountSelector =
-    "#root > div > div._order_panel_lwgvy_1 > div > button > div._layout_oxfjd_1 > div > div._counter_oxfjd_32 > span:nth-child(2)";
+    "#root > div > div._layout_18yen_1 > div._order_panel_1e1fh_1 > div > button > div._layout_oxfjd_1 > div > div._counter_oxfjd_32 > span:nth-child(2)";
   const canPaintCountElement = await waitForElement(document, canPaintCountSelector);
   return parseInt(canPaintCountElement.textContent);
 };
@@ -314,6 +317,12 @@ const resolveBoosts = async (document) => {
 const resolveWebVersionModal = async (document) => {
   const webVersionModalSelector = "#root > div > div._layout_16huv_1 > div > div > div._footer_18915_112 > button";
   await simulateClickIfExist("webVersionButton", webVersionModalSelector);
+};
+
+const openSidebar = async (document) => {
+  const sidebarSelector =
+    "#root > div > div._header_dwodb_1 > div > div._buttons_container_17fy4_1 > div._group_17fy4_8._left_17fy4_15 > button._burger_button_17fy4_74";
+  await simulateClickIfExist("sidebar", sidebarSelector);
 };
 
 const init = async () => {
