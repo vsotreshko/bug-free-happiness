@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.2
+// @version     5.3
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -207,7 +207,7 @@ function simulatePointerEvents(element, startX, startY, endX, endY) {
 const clickPaintButton = async (document) => {
   const paintButton = await waitForElement(
     document,
-    "#root > div > div._layout_18yen_1 > div._order_panel_1e1fh_1 > div > button > span"
+    "#root > div > div:nth-child(5) > div:nth-child(2) > div > button > span"
   );
   simulateClickX(paintButton);
 };
@@ -215,7 +215,7 @@ const clickPaintButton = async (document) => {
 const findColors = async (document) => {
   // Click on the active color
   const activeColorSelector =
-    "#root > div > div._layout_18yen_1 > div._order_panel_1e1fh_1 > div > div._info_1e1fh_54 > div._active_color_1e1fh_63";
+    "#root > div > div:nth-child(5) > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(1)";
   const activeColor = await waitForElement(document, activeColorSelector);
   simulateClickX(activeColor);
 
@@ -224,7 +224,7 @@ const findColors = async (document) => {
 
   // Get palette colors
   const paletteSelector =
-    "#root > div > div._layout_18yen_1 > div._order_panel_1e1fh_1 > div > div._expandable_panel_layout_1v9vd_1 > div > div._color_line_epppt_15";
+    "#root > div > div:nth-child(5) > div:nth-child(2) > div > div:nth-child(3) > div > div:nth-child(2)";
   const palette = await waitForElement(document, paletteSelector);
 
   const colors = [];
@@ -266,7 +266,7 @@ const selectBlumTemplate = async (document) => {
 
 const getCanPaintCount = async (document) => {
   const canPaintCountSelector =
-    "#root > div > div._layout_18yen_1 > div._order_panel_1e1fh_1 > div > button > div._layout_oxfjd_1 > div > div._counter_oxfjd_32 > span:nth-child(2)";
+    "#root > div > div:nth-child(5) > div:nth-child(2) > div > button > div:nth-child(1) > div > div:nth-child(2) > span:nth-child(2)";
   const canPaintCountElement = await waitForElement(document, canPaintCountSelector);
   return parseInt(canPaintCountElement.textContent);
 };
@@ -291,17 +291,6 @@ const autoClaimReward = async (document, toClose = true) => {
   }
 };
 
-const resolveTasks = async (document) => {
-  // TODO: NOT WORKING
-  const limeGameSelector =
-    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(1)";
-  await simulateClickIfExist("limeGame", limeGameSelector);
-
-  const checkNameSelector =
-    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(8)";
-  await simulateClickIfExist("checkName", checkNameSelector);
-};
-
 const resolveBoosts = async (document) => {
   await simulateClickIfExist(
     "boostsTab",
@@ -314,24 +303,9 @@ const resolveBoosts = async (document) => {
   // console.log("paintRewardLevel", paintRewardLevel.textContent.trim().replace("lvl").toLowerCase());
 };
 
-const resolveWebVersionModal = async (document) => {
-  const webVersionModalSelector = "#root > div > div._layout_16huv_1 > div > div > div._footer_18915_112 > button";
-  await simulateClickIfExist("webVersionButton", webVersionModalSelector);
-};
-
-const openSidebar = async (document) => {
-  const sidebarSelector =
-    "#root > div > div._header_dwodb_1 > div > div._buttons_container_17fy4_1 > div._group_17fy4_8._left_17fy4_15 > button._burger_button_17fy4_74";
-  await simulateClickIfExist("sidebar", sidebarSelector);
-};
-
 const init = async () => {
-  console.log("NotPixel Running...");
-
   // Wait for the page to load
   await delay(5000);
-
-  await resolveWebVersionModal(document);
 
   let res = await selectBlumTemplate(document);
   if (!res) {
@@ -394,3 +368,26 @@ const init = async () => {
 };
 
 init();
+
+// OLD CODE -----------------------------------------------------------------------
+const resolveWebVersionModal = async (document) => {
+  const webVersionModalSelector = "#root > div > div._layout_16huv_1 > div > div > div._footer_18915_112 > button";
+  await simulateClickIfExist("webVersionButton", webVersionModalSelector);
+};
+
+const openSidebar = async (document) => {
+  const sidebarSelector =
+    "#root > div > div._header_dwodb_1 > div > div._buttons_container_17fy4_1 > div._group_17fy4_8._left_17fy4_15 > button._burger_button_17fy4_74";
+  await simulateClickIfExist("sidebar", sidebarSelector);
+};
+
+const resolveTasks = async (document) => {
+  // TODO: NOT WORKING
+  const limeGameSelector =
+    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(1)";
+  await simulateClickIfExist("limeGame", limeGameSelector);
+
+  const checkNameSelector =
+    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(8)";
+  await simulateClickIfExist("checkName", checkNameSelector);
+};
