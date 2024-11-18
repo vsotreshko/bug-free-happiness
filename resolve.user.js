@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.3
+// @version     5.4
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -125,38 +125,6 @@ const simulateClickX = (button) => {
   });
 };
 
-const simulateClickHaloween = (button) => {
-  const events = [
-    new PointerEvent("pointerdown", {
-      bubbles: true,
-      cancelable: true,
-      isTrusted: true,
-      pointerId: 1,
-      width: 1,
-      height: 1,
-      pressure: 0.5,
-      pointerType: "touch",
-    }),
-    new MouseEvent("mousedown", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
-    new PointerEvent("pointerup", {
-      bubbles: true,
-      cancelable: true,
-      isTrusted: true,
-      pointerId: 1,
-      width: 1,
-      height: 1,
-      pressure: 0,
-      pointerType: "touch",
-    }),
-    new MouseEvent("mouseup", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
-    new PointerEvent("click", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
-  ];
-
-  events.forEach((event, index) => {
-    setTimeout(() => button.dispatchEvent(event), index * 100);
-  });
-};
-
 const waitForElement = async (document, selector, timeout = 10000) => {
   console.warn(`Waiting for: ${selector}`);
   return new Promise((resolve, reject) => {
@@ -248,7 +216,7 @@ const clickByCoof = async (canvas, x, y) => {
 };
 
 const changeCursorPositionOnCanvas = async (canvas) => {
-  const quarter = getRandomInt(20, 30) / 100; // (20 - 30)
+  const quarter = getRandomInt(10, 20) / 100; // (10 - 20)
   await clickByCoof(canvas, quarter, quarter);
 };
 
@@ -390,4 +358,48 @@ const resolveTasks = async (document) => {
   const checkNameSelector =
     "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(8)";
   await simulateClickIfExist("checkName", checkNameSelector);
+};
+
+const simulateClickHaloween = (button) => {
+  const events = [
+    new PointerEvent("pointerdown", {
+      bubbles: true,
+      cancelable: true,
+      isTrusted: true,
+      pointerId: 1,
+      width: 1,
+      height: 1,
+      pressure: 0.5,
+      pointerType: "touch",
+    }),
+    new MouseEvent("mousedown", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
+    new PointerEvent("pointerup", {
+      bubbles: true,
+      cancelable: true,
+      isTrusted: true,
+      pointerId: 1,
+      width: 1,
+      height: 1,
+      pressure: 0,
+      pointerType: "touch",
+    }),
+    new MouseEvent("mouseup", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
+    new PointerEvent("click", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
+  ];
+
+  events.forEach((event, index) => {
+    setTimeout(() => button.dispatchEvent(event), index * 100);
+  });
+};
+
+const openDesktopVersion = async () => {
+  await openSidebar();
+
+  await delay(1000);
+
+  const desktopVersionSelector = "#root > div > nav > div:nth-child(2) > div:nth-child(2) > button";
+  await simulateClickIfExist("desktopVersion", desktopVersionSelector);
+
+  const canvasMenuItemSelector = "#root > div > nav > div:nth-child(1) > ul > li:nth-child(1)";
+  await simulateClickIfExist("canvasMenuItem", canvasMenuItemSelector);
 };
