@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.4
+// @version     5.5
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -216,7 +216,7 @@ const clickByCoof = async (canvas, x, y) => {
 };
 
 const changeCursorPositionOnCanvas = async (canvas) => {
-  const quarter = getRandomInt(10, 20) / 100; // (10 - 20)
+  const quarter = getRandomInt(15, 25) / 100; // (10 - 20)
   await clickByCoof(canvas, quarter, quarter);
 };
 
@@ -269,6 +269,30 @@ const resolveBoosts = async (document) => {
     "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div._group_v8prs_7 > div:nth-child(1) > div._content_container_8sbvi_21 > div > div._item_reward_container_8sbvi_40 > span._level_text_8sbvi_53";
   const paintRewardLevel = await waitForElement(document, paintRewardLevelSelector);
   // console.log("paintRewardLevel", paintRewardLevel.textContent.trim().replace("lvl").toLowerCase());
+};
+
+const enterSecretCode = async (document, code) => {
+  await openSidebar();
+
+  await delay(1000);
+
+  const secretsMenuItemSelector = "#root > div > nav > div:nth-child(1) > ul > li:nth-child(4)";
+  await simulateClickIfExist("canvasMenuItem", secretsMenuItemSelector);
+
+  const inputSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > input";
+
+  const input = await waitForElement(document, inputSelector);
+
+  await delay(getRandomInt(1000, 2000));
+  input.value = code;
+  input.dispatchEvent(new Event("input", { bubbles: true }));
+  await delay(getRandomInt(1000, 2000));
+
+  const submitButtonSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(4) > button";
+  const submitButton = await waitForElement(document, submitButtonSelector);
+  submitButton.scrollIntoView();
+  await delay(getRandomInt(1000, 2000));
+  await simulateClickIfExist("submitButton", submitButtonSelector);
 };
 
 const init = async () => {
@@ -343,9 +367,9 @@ const resolveWebVersionModal = async (document) => {
   await simulateClickIfExist("webVersionButton", webVersionModalSelector);
 };
 
-const openSidebar = async (document) => {
+const openSidebar = async () => {
   const sidebarSelector =
-    "#root > div > div._header_dwodb_1 > div > div._buttons_container_17fy4_1 > div._group_17fy4_8._left_17fy4_15 > button._burger_button_17fy4_74";
+    "#root > div > div:nth-child(1) > div > div:nth-child(2) > div:nth-child(1) > button:nth-child(1)";
   await simulateClickIfExist("sidebar", sidebarSelector);
 };
 
