@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.5
+// @version     5.6
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -221,7 +221,7 @@ const changeCursorPositionOnCanvas = async (canvas) => {
 };
 
 const selectBlumTemplate = async (document) => {
-  const blumTemplateSelector = "#root > div > div:nth-child(3) > div > div > button:nth-of-type(2)";
+  const blumTemplateSelector = "#root > div > div:nth-child(3) > div > div > button:last-child";
   const blumTemplate = await waitForElement(document, blumTemplateSelector);
   if (blumTemplate) {
     console.log("Found blum template");
@@ -295,9 +295,16 @@ const enterSecretCode = async (document, code) => {
   await simulateClickIfExist("submitButton", submitButtonSelector);
 };
 
+const closeModal = async (document) => {
+  const closeModalSelector = "#root > div > div:nth-child(7) > div > div > div > div:nth-child(1) > div > div > span";
+  await simulateClickIfExist("closeModal", closeModalSelector);
+};
+
 const init = async () => {
   // Wait for the page to load
   await delay(5000);
+
+  await closeModal(document);
 
   let res = await selectBlumTemplate(document);
   if (!res) {
