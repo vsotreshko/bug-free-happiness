@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.6
+// @version     5.7
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*notpx.app/*
@@ -265,10 +265,51 @@ const resolveBoosts = async (document) => {
     "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._panel_1mia4_1 > div:nth-child(2)"
   );
 
-  const paintRewardLevelSelector =
-    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div._group_v8prs_7 > div:nth-child(1) > div._content_container_8sbvi_21 > div > div._item_reward_container_8sbvi_40 > span._level_text_8sbvi_53";
-  const paintRewardLevel = await waitForElement(document, paintRewardLevelSelector);
-  // console.log("paintRewardLevel", paintRewardLevel.textContent.trim().replace("lvl").toLowerCase());
+  let shouldContinue = true;
+  while (shouldContinue) {
+    const levelTextSelector =
+      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div > div:nth-child(2) > span:nth-child(2)";
+    const levelText = await waitForElement(document, levelTextSelector);
+    const level = parseInt(levelText.textContent.trim().replaceAll("lvl", ""));
+
+    if (level >= 10) {
+      shouldContinue = false;
+    }
+
+    const boostButtonSelector =
+      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div > div:nth-child(2) > div:nth-child(2)";
+    await simulateClickIfExist("closeModal", boostButtonSelector);
+
+    await delay(1000);
+
+    const updateBoostButtonSelector = "body > div:nth-child(8) > div > div:nth-child(4) > button:nth-child(2)";
+    await simulateClickIfExist("updateBoostButton", updateBoostButtonSelector);
+
+    await delay(1000);
+  }
+
+  shouldContinue = true;
+  while (shouldContinue) {
+    const levelTextSelector =
+      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div > div:nth-child(2) > span:nth-child(2)";
+    const levelText = await waitForElement(document, levelTextSelector);
+    const level = parseInt(levelText.textContent.trim().replaceAll("lvl", ""));
+
+    if (level >= 7) {
+      shouldContinue = false;
+    }
+
+    const boostButtonSelector =
+      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div > div:nth-child(2) > div:nth-child(1)";
+    await simulateClickIfExist("closeModal", boostButtonSelector);
+
+    await delay(1000);
+
+    const updateBoostButtonSelector = "body > div:nth-child(8) > div > div:nth-child(4) > button:nth-child(2)";
+    await simulateClickIfExist("updateBoostButton", updateBoostButtonSelector);
+
+    await delay(1000);
+  }
 };
 
 const enterSecretCode = async (document, code) => {
