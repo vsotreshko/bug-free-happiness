@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.2
+// @version      6.3
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -11,37 +11,16 @@
 // ==/UserScript==
 
 const verifyWithCodes = [
-  { title: "$2.5m+ dogs airdrop", code: "HAPPYDOGS" },
-  { title: "liquidity pools guide", code: "Blumersss" },
-  { title: "what are amms?", code: "CRYPTOSMART" },
-  { title: "say no to rug pull!", code: "SUPERBLUM" },
-  { title: "what are telegram mini apps?", code: "CRYPTOBLUM" },
-  { title: "navigating crypto", code: "HEYBLUM" },
-  { title: "secure your crypto!", code: "BEST PROJECT EVER" },
-  { title: "forks explained", code: "GO GET" },
-  { title: "how to analyze crypto?", code: "VALUE" },
-  { title: "doxxing? what's that?", code: "NODOXXING" },
-  // { title: "pre-market trading?", code: "WOWBLUM" }, // TODO: Not working
-  { title: "how to memecoin?", code: "MEMEBLUM" },
-  { title: "crypto terms. part 1", code: "BLUMEXPLORER" },
-  { title: "bitcoin rainbow chart", code: "SOBLUM" },
-  { title: "token burning: how & why?", code: "ONFIRE" },
-  { title: "how to trade perps?", code: "CRYPTOFAN" },
-  { title: "sharding explained", code: "BLUMTASTIC" },
-  { title: "defi explained", code: "BLUMFORCE" },
-  { title: "how to find altcoins?", code: "ULTRABLUM" },
-  { title: "crypto slang. part 1", code: "BLUMSTORM" },
-  { title: "bitcoin rainbow chart?", code: "SOBLUM" },
-  { title: "pumptober special", code: "PUMPIT" },
-  { title: "what is on-chain analysis?", code: "BLUMEXTRA" },
-  { title: "crypto slang. part 1", code: "BLUMSTORM" },
-  { title: "how to find altcoins?", code: "ULTRABLUM" },
-  { title: "choosing a crypto exchange", code: "CRYPTOZONE" },
-  { title: "crypto slang. part 2", code: "FOMOOO" },
-  { title: "defi risks: key insights", code: "BLUMHELPS" },
+  { title: "Crypto Regulations #2", code: "BLUMRULES" },
+  { title: "DEX History", code: "GODEX" },
+  { title: "What's next for Defi?", code: "BLUMNOW" },
+  { title: "What is Slippage?", code: "CRYPTOBUZZ" },
   { title: "Understanding Gas Fees", code: "CRYPTOGAS" },
-  { title: "What's Crypto DEX?", code: "DEXXX" },
-  { title: "Node Sales in Crypto", code: "BLUMIFY" },
+  { title: "Regulation: Yay or Nay?", code: "BLUMSSS" },
+  { title: "Smart Contracts 101", code: "SMARTBLUM" },
+  { title: "P2P Trading Safety Tips", code: "BLUMTIPS" },
+  { title: "What’s Next for DeFi?", code: "BLUMNOW" },
+  { title: "Crypto Slang. Part 3", code: "BOOBLUM" },
 ];
 /** Custom functions -------------------------------------------------------------- */
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -344,13 +323,6 @@ const processWeeklyTasks = async (document) => {
 };
 
 const resolveTasks = async (document) => {
-  // Open Tasks tab
-  const tasksTab = await waitForElement(document, 'a[href*="/tasks"]');
-  if (tasksTab) {
-    await delay(getRandomInt(3000, 5000)); // Wait page for load
-    tasksTab.click();
-  }
-
   await delay(getRandomInt(3000, 5000)); // Wait page for load
 
   // await claimProof(document);
@@ -358,18 +330,47 @@ const resolveTasks = async (document) => {
   const tabSelectors = [
     "#app > div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs-inline.is-fully-left-scrolled > div.content > div > label:nth-child(2)", // New
     // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(3) > span", // OnChain
-    // "div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs > div.content > div > label:nth-child(4) > span", // Socials
-    "#app > div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs-inline.is-fully-left-scrolled > div.content > div > label:nth-child(5)", // Academy
+    "#app > div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs-inline.is-fully-left-scrolled > div.content > div > label:nth-child(4)", // Socials
+    "#app > div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs-inline.is-fully-left-scrolled > div.content > div > label:nth-child(5) > span", // Blum bits
+    "#app > div.tasks-page.page > div.sections > div:nth-child(3) > div > div.kit-tabs-inline.is-fully-left-scrolled > div.content > div > label:nth-child(6)", // Academy
   ];
 
   for (const tabSelector of tabSelectors) {
     const tab = document.querySelector(tabSelector);
     tab.click();
-    await delay(getRandomInt(3000, 5000)); // Wait page for load
-    const taskItems = document.querySelectorAll(".pages-tasks-item"); // Get all task items
+    await delay(getRandomInt(1000, 3000)); // Wait page for load
+
+    const tasksContainerSelector =
+      "#app > div.tasks-page.page > div.sections > div:nth-child(3) > div > div.tasks-list";
+    const tasksContainer = await waitForElement(document, tasksContainerSelector);
+    const taskItems = tasksContainer.querySelectorAll(".pages-tasks-item"); // Get all task items
+
     await iterateOverTaskItems(taskItems, "start"); // Start all
     await iterateOverTaskItems(taskItems, "verify"); // Verify if needed
     await iterateOverTaskItems(taskItems, "claim"); // Claim all
+  }
+};
+
+const openTab = async (tabName) => {
+  const homeTabSelector = "#app > div.layout-tabs.tabs > a:nth-child(1)";
+  const earnTabSelector = "#app > div.layout-tabs.tabs > a:nth-child(2)";
+  const frensTabSelector = 'a[href*="/frens"]';
+  let tab = undefined;
+
+  switch (tabName) {
+    case "home":
+      tab = await waitForElement(document, homeTabSelector);
+      break;
+    case "earn":
+      tab = await waitForElement(document, earnTabSelector);
+      break;
+    case "frens":
+      tab = await waitForElement(document, frensTabSelector);
+      break;
+  }
+
+  if (tab) {
+    tab.click();
   }
 };
 
@@ -377,27 +378,20 @@ const init = async () => {
   // Find "Continue" button
   const continueButton = await waitForElement(document, "button.kit-button.is-large.is-fill", 3000);
   if (continueButton) {
-    await delay(getRandomInt(3000, 5000));
+    await delay(2000);
     continueButton.click();
   }
 
-  // Claim / Continue / Start
-  const claimButton = await waitForElement(document, "button.kit-button.is-large.is-fill.button", 2000);
-  if (claimButton) {
-    await delay(getRandomInt(3000, 5000));
-    claimButton.click();
-  }
+  await openTab("home");
+  await delay(getRandomInt(1000, 3000));
+
+  await openTab("earn");
+  await delay(getRandomInt(1000, 3000));
 
   await resolveTasks(document);
 
-  await processWeeklyTasks(document);
-
-  // Open Frens tab
-  const frensTab = await waitForElement(document, 'a[href*="/frens"]');
-  if (frensTab) {
-    frensTab.click();
-  }
-  await delay(getRandomInt(3000, 5000)); // Wait after click
+  await openTab("frens");
+  await delay(getRandomInt(1000, 3000));
 
   // Claim frens
   const frensClaim = await waitForElement(document, "button.claim-button", 2000);
@@ -405,22 +399,16 @@ const init = async () => {
     await delay(getRandomInt(3000, 5000));
     frensClaim.click();
   }
-  await delay(getRandomInt(3000, 5000)); // Wait after click
 
-  // Open Home tab
-  const homeTab = await waitForElement(document, 'a[href*="/"]');
-  if (homeTab) {
-    homeTab.click();
-  }
-  await delay(getRandomInt(3000, 5000)); // Wait after click
+  await openTab("home");
+  await delay(getRandomInt(1000, 3000));
 
-  // Claim / Continue / Start
   const startFarming = await waitForElement(document, "button.kit-button.is-large.is-fill.button");
   if (startFarming) {
     startFarming.click();
   }
 
-  // playGame();
+  playGame();
 };
 
 init();
