@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.3
+// @version      6.4
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -385,10 +385,10 @@ const init = async () => {
   await openTab("home");
   await delay(getRandomInt(1000, 3000));
 
-  await openTab("earn");
-  await delay(getRandomInt(1000, 3000));
+  // await openTab("earn");
+  // await delay(getRandomInt(1000, 3000));
 
-  await resolveTasks(document);
+  // await resolveTasks(document);
 
   await openTab("frens");
   await delay(getRandomInt(1000, 3000));
