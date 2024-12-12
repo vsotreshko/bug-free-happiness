@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version    6.1
+// @version    6.2
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -274,6 +274,9 @@ const addSymbolToTheName = async (document, symbol) => {
   }
 };
 
+// await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
+// await launchBot(window, document, "PAWSOG_bot", "7200992513", "Paws");
+
 const init = async () => {
   window.onclick = (e) => {
     console.log(e.target); // to get the element
@@ -282,15 +285,12 @@ const init = async () => {
 
   await delay(5000); // Wait for window to load
 
-  // await addSymbolToTheName(document, "🐾");
-
-  // 06:00 -> 09:00 or 18:00 -> 21:00
-  // if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(18) && isEarlierThan(21))) {
-  await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
-  // } else {
-  // await launchBot(window, document, "notpixel", "7249432100", "Not Pixel");
-  // await launchBot(window, document, "PAWSOG_bot", "7200992513", "Paws");
-  // }
+  // 06:00 -> 09:00 or 21:00 -> 23:00
+  if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(21) && isEarlierThan(23))) {
+    await launchBot(window, document, "dogshouse_bot", "7352918101", "Dogs 🦴");
+  } else {
+    await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
+  }
 };
 
 init();

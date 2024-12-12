@@ -2,10 +2,10 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.7
+// @version     5.8
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
-// @match        *://*notpx.app/*
+// @match        *://*onetime.dog/*
 // @downloadURL  https://github.com/vsotreshko/bug-free-happiness/raw/main/resolve.user.js
 // @updateURL    https://github.com/vsotreshko/bug-free-happiness/raw/main/resolve.user.js
 // ==/UserScript==
@@ -160,318 +160,35 @@ function getElementByXpath(path) {
 
 /** ------------------------------------------------------------------------------- */
 
-// Симуляция событий указателя
-function simulatePointerEvents(element, startX, startY, endX, endY) {
-  const events = [
-    new PointerEvent("pointerdown", { clientX: startX, clientY: startY, bubbles: true }),
-    new PointerEvent("pointermove", { clientX: startX, clientY: startY, bubbles: true }),
-    new PointerEvent("pointermove", { clientX: endX, clientY: endY, bubbles: true }),
-    new PointerEvent("pointerup", { clientX: endX, clientY: endY, bubbles: true }),
-  ];
-
-  events.forEach((event) => element.dispatchEvent(event));
-}
-
-const clickPaintButton = async (document) => {
-  const paintButton = await waitForElement(
-    document,
-    "#root > div > div:nth-child(5) > div:nth-child(2) > div > button > span"
-  );
-  simulateClickX(paintButton);
-};
-
-const findColors = async (document) => {
-  // Click on the active color
-  const activeColorSelector =
-    "#root > div > div:nth-child(5) > div:nth-child(2) > div > div:nth-child(2) > div:nth-child(1)";
-  const activeColor = await waitForElement(document, activeColorSelector);
-  simulateClickX(activeColor);
-
-  // Await palette to appear
-  await delay(1000);
-
-  // Get palette colors
-  const paletteSelector =
-    "#root > div > div:nth-child(5) > div:nth-child(2) > div > div:nth-child(3) > div > div:nth-child(2)";
-  const palette = await waitForElement(document, paletteSelector);
-
-  const colors = [];
-
-  for (const child of palette.children) {
-    if (child.style.backgroundColor === "rgb(109, 72, 47)") {
-      colors.push(child);
-    }
-
-    if (child.style.backgroundColor === "rgb(0, 0, 0)") {
-      colors.push(child);
-    }
-  }
-
-  return colors;
-};
-
-const clickByCoof = async (canvas, x, y) => {
-  simulatePointerEvents(canvas, canvas.width * x, canvas.height * y, canvas.width * x, canvas.height * y);
-  simulateClickX(canvas);
-};
-
-const changeCursorPositionOnCanvas = async (canvas) => {
-  const quarter = getRandomInt(15, 25) / 100; // (10 - 20)
-  await clickByCoof(canvas, quarter, quarter);
-};
-
-const selectBlumTemplate = async (document) => {
-  const blumTemplateSelector = "#root > div > div:nth-child(3) > div > div > button:last-child";
-  const blumTemplate = await waitForElement(document, blumTemplateSelector);
-  if (blumTemplate) {
-    console.log("Found blum template");
-    simulateClick(blumTemplate);
-    return true;
-  }
-
-  return false;
-};
-
-const getCanPaintCount = async (document) => {
-  const canPaintCountSelector =
-    "#root > div > div:nth-child(5) > div:nth-child(2) > div > button > div:nth-child(1) > div > div:nth-child(2) > span:nth-child(2)";
-  const canPaintCountElement = await waitForElement(document, canPaintCountSelector);
-  return parseInt(canPaintCountElement.textContent);
-};
-
-const autoClaimReward = async (document, toClose = true) => {
-  await simulateClickIfExist(
-    "claimMenuButton",
-    "#root > div > div:nth-child(1) > div > div:nth-child(2) > div:nth-child(2) > button"
-  );
-
-  await delay(1000);
-
-  await simulateClickIfExist(
-    "claimButton",
-    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._container_13oyr_1 > button"
-  );
-
-  await delay(1000);
-
-  if (toClose) {
-    await simulateClickIfExist("backButton", "#root > div > div:nth-child(2) > button");
-  }
-};
-
-const resolveBoosts = async (document) => {
-  await simulateClickIfExist(
-    "boostsTab",
-    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._panel_1mia4_1 > div:nth-child(2)"
-  );
-
-  let shouldContinue = true;
-  while (shouldContinue) {
-    const levelTextSelector =
-      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div > div:nth-child(2) > span:nth-child(2)";
-    const levelText = await waitForElement(document, levelTextSelector);
-    const level = parseInt(levelText.textContent.trim().replaceAll("lvl", ""));
-
-    if (level >= 10) {
-      shouldContinue = false;
-    }
-
-    const boostButtonSelector =
-      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div > div:nth-child(2) > div:nth-child(2)";
-    await simulateClickIfExist("closeModal", boostButtonSelector);
-
-    await delay(1000);
-
-    const updateBoostButtonSelector = "body > div:nth-child(8) > div > div:nth-child(4) > button:nth-child(2)";
-    await simulateClickIfExist("updateBoostButton", updateBoostButtonSelector);
-
-    await delay(1000);
-  }
-
-  shouldContinue = true;
-  while (shouldContinue) {
-    const levelTextSelector =
-      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div > div:nth-child(2) > div:nth-child(1) > div:nth-child(2) > div > div:nth-child(2) > span:nth-child(2)";
-    const levelText = await waitForElement(document, levelTextSelector);
-    const level = parseInt(levelText.textContent.trim().replaceAll("lvl", ""));
-
-    if (level >= 7) {
-      shouldContinue = false;
-    }
-
-    const boostButtonSelector =
-      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(6) > div > div:nth-child(2) > div:nth-child(1)";
-    await simulateClickIfExist("closeModal", boostButtonSelector);
-
-    await delay(1000);
-
-    const updateBoostButtonSelector = "body > div:nth-child(8) > div > div:nth-child(4) > button:nth-child(2)";
-    await simulateClickIfExist("updateBoostButton", updateBoostButtonSelector);
-
-    await delay(1000);
-  }
-};
-
-const enterSecretCode = async (document, code) => {
-  await openSidebar();
-
-  await delay(1000);
-
-  const secretsMenuItemSelector = "#root > div > nav > div:nth-child(1) > ul > li:nth-child(4)";
-  await simulateClickIfExist("canvasMenuItem", secretsMenuItemSelector);
-
-  const inputSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(2) > input";
-
-  const input = await waitForElement(document, inputSelector);
-
-  await delay(getRandomInt(1000, 2000));
-  input.value = code;
-  input.dispatchEvent(new Event("input", { bubbles: true }));
-  await delay(getRandomInt(1000, 2000));
-
-  const submitButtonSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div > div:nth-child(4) > button";
-  const submitButton = await waitForElement(document, submitButtonSelector);
-  submitButton.scrollIntoView();
-  await delay(getRandomInt(1000, 2000));
-  await simulateClickIfExist("submitButton", submitButtonSelector);
-};
-
-const closeModal = async (document) => {
-  const closeModalSelector = "#root > div > div:nth-child(7) > div > div > div > div:nth-child(1) > div > div > span";
-  await simulateClickIfExist("closeModal", closeModalSelector);
-};
-
 const init = async () => {
-  // Wait for the page to load
-  await delay(5000);
+  const startJourneyBtnSelector = "#root > div > div:nth-child(4) > div:nth-child(2)";
 
-  await closeModal(document);
+  await simulateClickIfExist("Start Journey", startJourneyBtnSelector);
 
-  let res = await selectBlumTemplate(document);
-  if (!res) {
-    console.log("!!! !!! Blum template not found !!! !!!");
-    return;
-  }
+  await delay(getRandomInt(1000, 3000));
 
-  await delay(2000);
+  const calendarSelector = "#root > div > div:nth-child(3) > div:nth-child(2) > div:nth-child(5) > div";
+  const calendar = await waitForElement(document, calendarSelector);
+  if (calendar) {
+    const currentDay = Array.from(calendar.children).find((child) => {
+      return child.className.includes("current");
+    });
 
-  const templateCatalogTitleSelector = "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > h1";
-  const templateCatalogTitle = await waitForElement(document, templateCatalogTitleSelector, 2000);
+    if (currentDay) {
+      console.log("Found current day:", currentDay);
+      await delay(getRandomInt(1000, 3000));
 
-  if (templateCatalogTitle && templateCatalogTitle.textContent.trim().toLowerCase().includes("templates")) {
-    await delay(2000);
+      await simulateClick(currentDay);
 
-    const blumTemplateSelector =
-      "#root > div > div:nth-child(2) > div:nth-child(2) > div:nth-child(3) > div > div:nth-child(1) > div:nth-child(2) > div > img";
-    const blumTemplate = await waitForElement(document, blumTemplateSelector);
-    simulateClick(blumTemplate);
+      await delay(getRandomInt(1000, 3000));
 
-    await delay(1000);
+      const closeButtonSelector = "#root > div > div:nth-child(4) > div > div:nth-child(2)";
 
-    const buttonSelector = "body > div:nth-child(8) > div > div > div > div:nth-child(4) > button";
-    const button = await waitForElement(document, buttonSelector);
-    simulateClick(button);
-
-    await delay(2000);
-
-    window.location.reload();
-  }
-
-  const canvas = await waitForElement(document, "#canvasHolder");
-  await changeCursorPositionOnCanvas(canvas);
-  await delay(1000);
-
-  const canPaintCount = await getCanPaintCount(document);
-
-  if (canPaintCount > 1) {
-    for (let i = 0; i < Math.floor(canPaintCount / 2); i++) {
-      await delay(1000);
-      await changeCursorPositionOnCanvas(canvas);
-      const colors = await findColors(document);
-
-      for (const color of colors) {
-        simulateClickX(color);
-        await delay(500);
-        await clickPaintButton(document);
-        await delay(500);
-      }
+      await simulateClickIfExist("Close button", closeButtonSelector);
+    } else {
+      console.warn("Could not find current day in calendar");
     }
   }
-
-  await autoClaimReward(document, false);
-
-  await resolveTasks(document);
-
-  await delay(2000);
-
-  await resolveBoosts(document);
 };
 
 init();
-
-// OLD CODE -----------------------------------------------------------------------
-const resolveWebVersionModal = async (document) => {
-  const webVersionModalSelector = "#root > div > div._layout_16huv_1 > div > div > div._footer_18915_112 > button";
-  await simulateClickIfExist("webVersionButton", webVersionModalSelector);
-};
-
-const openSidebar = async () => {
-  const sidebarSelector =
-    "#root > div > div:nth-child(1) > div > div:nth-child(2) > div:nth-child(1) > button:nth-child(1)";
-  await simulateClickIfExist("sidebar", sidebarSelector);
-};
-
-const resolveTasks = async (document) => {
-  // TODO: NOT WORKING
-  const limeGameSelector =
-    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(1)";
-  await simulateClickIfExist("limeGame", limeGameSelector);
-
-  const checkNameSelector =
-    "#root > div > div._layout_q8u4d_1 > div._content_q8u4d_22 > div._info_layout_bt2qf_1 > div > div:nth-child(8)";
-  await simulateClickIfExist("checkName", checkNameSelector);
-};
-
-const simulateClickHaloween = (button) => {
-  const events = [
-    new PointerEvent("pointerdown", {
-      bubbles: true,
-      cancelable: true,
-      isTrusted: true,
-      pointerId: 1,
-      width: 1,
-      height: 1,
-      pressure: 0.5,
-      pointerType: "touch",
-    }),
-    new MouseEvent("mousedown", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
-    new PointerEvent("pointerup", {
-      bubbles: true,
-      cancelable: true,
-      isTrusted: true,
-      pointerId: 1,
-      width: 1,
-      height: 1,
-      pressure: 0,
-      pointerType: "touch",
-    }),
-    new MouseEvent("mouseup", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
-    new PointerEvent("click", { bubbles: true, cancelable: true, isTrusted: true, offsetX: 137, offsetY: 91 }),
-  ];
-
-  events.forEach((event, index) => {
-    setTimeout(() => button.dispatchEvent(event), index * 100);
-  });
-};
-
-const openDesktopVersion = async () => {
-  await openSidebar();
-
-  await delay(1000);
-
-  const desktopVersionSelector = "#root > div > nav > div:nth-child(2) > div:nth-child(2) > button";
-  await simulateClickIfExist("desktopVersion", desktopVersionSelector);
-
-  const canvasMenuItemSelector = "#root > div > nav > div:nth-child(1) > ul > li:nth-child(1)";
-  await simulateClickIfExist("canvasMenuItem", canvasMenuItemSelector);
-};
