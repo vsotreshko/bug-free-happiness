@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version    6.2
+// @version    6.3
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -87,7 +87,7 @@ const waitForElement = async (document, selector, timeout = 10000) => {
   });
 };
 
-const launchBot = async (window, document, kBotName, aBotName, botTitle) => {
+const launchBot = async (window, document, kBotName, aBotName, botTitles) => {
   const currentBotTitle = await Promise.any([
     // a telegram version
     waitForElement(
@@ -103,7 +103,10 @@ const launchBot = async (window, document, kBotName, aBotName, botTitle) => {
     ),
   ]);
 
-  if (currentBotTitle && currentBotTitle.textContent.trim().toLowerCase() === botTitle.trim().toLowerCase()) {
+  if (
+    currentBotTitle &&
+    botTitles.some((title) => currentBotTitle.textContent.trim().toLowerCase() === title.trim().toLowerCase())
+  ) {
     console.log("Bot title found");
   } else {
     const currentUrl = window.location.href;
@@ -285,11 +288,11 @@ const init = async () => {
 
   await delay(5000); // Wait for window to load
 
-  // 06:00 -> 09:00 or 21:00 -> 23:00
-  if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(21) && isEarlierThan(23))) {
-    await launchBot(window, document, "dogshouse_bot", "7352918101", "Dogs 🦴");
+  // 06:00 -> 09:00 or 21:00 -> 24:00
+  if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(21) && isEarlierThan(24))) {
+    await launchBot(window, document, "dogshouse_bot", "7352918101", ["Dogs 🦴", "dogs"]);
   } else {
-    await launchBot(window, document, "BlumCryptoBot", "6865543862", "Blum");
+    await launchBot(window, document, "BlumCryptoBot", "6865543862", ["Blum", "blum"]);
   }
 };
 
