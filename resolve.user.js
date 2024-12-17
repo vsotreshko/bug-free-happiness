@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.9
+// @version     6.0
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*onetime.dog/*
@@ -167,9 +167,15 @@ const init = async () => {
 
   await delay(getRandomInt(1000, 3000));
 
-  const calendarSelector = "#root > div > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > div";
-  const calendar = await waitForElement(document, calendarSelector);
+  // Find element with class name "...calendar..."
+  const calendar = Array.from(document.querySelectorAll("*")).find(
+    (element) => element.className && typeof element.className === "string" && element.className.includes("calendar")
+  );
+
   if (calendar) {
+    console.log("Found calendar element:", calendar);
+
+    // Find element with class name "...current..."
     const currentDay = Array.from(calendar.children).find((child) => {
       return child.className.includes("current");
     });
@@ -186,8 +192,10 @@ const init = async () => {
 
       await simulateClickIfExist("Close button", closeButtonSelector);
     } else {
-      console.warn("Could not find current day in calendar");
+      console.error("Could not find current day in calendar");
     }
+  } else {
+    console.error("Could not find element with 'calendar' in class name");
   }
 };
 
