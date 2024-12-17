@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     5.8
+// @version     5.9
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*onetime.dog/*
@@ -167,7 +167,7 @@ const init = async () => {
 
   await delay(getRandomInt(1000, 3000));
 
-  const calendarSelector = "#root > div > div:nth-child(3) > div:nth-child(2) > div:nth-child(5) > div";
+  const calendarSelector = "#root > div > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > div";
   const calendar = await waitForElement(document, calendarSelector);
   if (calendar) {
     const currentDay = Array.from(calendar.children).find((child) => {
@@ -182,7 +182,7 @@ const init = async () => {
 
       await delay(getRandomInt(1000, 3000));
 
-      const closeButtonSelector = "#root > div > div:nth-child(4) > div > div:nth-child(2)";
+      const closeButtonSelector = "#root > div > div:nth-child(4) > div:nth-child(2)";
 
       await simulateClickIfExist("Close button", closeButtonSelector);
     } else {
