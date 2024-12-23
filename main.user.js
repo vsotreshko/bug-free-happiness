@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.4
+// @version      6.5
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -81,8 +81,8 @@ const playGame = async () => {
       whiteColor: [255, 255, 255],
       bombColor: [126, 119, 121],
       flowerTolerance: 9,
-      iceTolerance: 5,
-      bombTolerance: 3,
+      iceTolerance: 9,
+      bombTolerance: 9,
       playButtonSelector: "button.is-primary, .play-btn",
       canvasSelector: "canvas",
       playCheckInterval: 2500,
@@ -90,7 +90,7 @@ const playGame = async () => {
       excludedArea: { top: 70, bottom: 50 },
       startGameDelay: 1000,
       flowerClickProbability: 1,
-      iceClickProbability: 0.9,
+      iceClickProbability: 1,
       // Add configuration for surrounding pixel check
       surroundingPixelRadius: 1, // Check pixels within this radius
       matchThreshold: 0.6, // Percentage of matching surrounding pixels required
@@ -153,54 +153,33 @@ const playGame = async () => {
       let loopShouldWork = true;
 
       for (let y = config.excludedArea.top; y < height - config.excludedArea.bottom; y++) {
-        if (!loopShouldWork) break;
+        // if (!loopShouldWork) break;
 
         for (let x = 0; x < width; x++) {
           const index = (y * width + x) * 4;
           const [r, g, b] = [pixels[index], pixels[index + 1], pixels[index + 2]];
 
           // Check current pixel and surrounding area for each color
-          if (
-            isColorSuits(r, g, b, config.bombColor, config.bombTolerance) &&
-            checkSurroundingPixels(pixels, width, height, x, y, config.bombColor, config.bombTolerance)
-          ) {
+          if (isColorSuits(r, g, b, config.bombColor, config.bombTolerance)) {
             simulateClick(canvas, x, y);
             loopShouldWork = false;
             break;
           }
 
-          if (
-            isColorSuits(r, g, b, config.greenColor, config.flowerTolerance) &&
-            checkSurroundingPixels(pixels, width, height, x, y, config.greenColor, config.flowerTolerance)
-          ) {
-            executeWithProbability(() => {
-              simulateClick(canvas, x, y);
-            }, config.flowerClickProbability);
-
+          if (isColorSuits(r, g, b, config.greenColor, config.flowerTolerance)) {
+            simulateClick(canvas, x, y);
             loopShouldWork = false;
             break;
           }
 
-          if (
-            isColorSuits(r, g, b, config.orangeColor, config.flowerTolerance) &&
-            checkSurroundingPixels(pixels, width, height, x, y, config.orangeColor, config.flowerTolerance)
-          ) {
-            executeWithProbability(() => {
-              simulateClick(canvas, x, y);
-            }, config.flowerClickProbability);
-
+          if (isColorSuits(r, g, b, config.orangeColor, config.flowerTolerance)) {
+            simulateClick(canvas, x, y);
             loopShouldWork = false;
             break;
           }
 
-          if (
-            isColorSuits(r, g, b, config.whiteColor, config.iceTolerance) &&
-            checkSurroundingPixels(pixels, width, height, x, y, config.whiteColor, config.iceTolerance)
-          ) {
-            executeWithProbability(() => {
-              simulateClick(canvas, x, y);
-            }, config.iceClickProbability);
-
+          if (isColorSuits(r, g, b, config.whiteColor, config.iceTolerance)) {
+            simulateClick(canvas, x, y);
             loopShouldWork = false;
             break;
           }
@@ -384,6 +363,14 @@ const init = async () => {
 
   await openTab("home");
   await delay(getRandomInt(1000, 3000));
+
+  const dayClaimSelector =
+    "#app > div.index-page.page > div > div.profile-with-balance > div.pages-index-widgets.widgets > div.pages-index-widgets-daily-reward.widget > div > button";
+  const dayClaim = await waitForElement(document, dayClaimSelector, 2000);
+  if (dayClaim) {
+    await delay(getRandomInt(3000, 5000));
+    dayClaim.click();
+  }
 
   // await openTab("earn");
   // await delay(getRandomInt(1000, 3000));
