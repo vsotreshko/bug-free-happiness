@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.6
+// @version      6.7
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -21,6 +21,11 @@ const verifyWithCodes = [
   { title: "P2P Trading Safety Tips", code: "BLUMTIPS" },
   { title: "What’s Next for DeFi?", code: "BLUMNOW" },
   { title: "Crypto Slang. Part 3", code: "BOOBLUM" },
+
+  { title: "Blum CMO @ Blockchain Life", code: "BLUMISLIFE" },
+  { title: "Dex History #3", code: "BLUMLOVE" },
+  { title: "P2P Trading Safety Tips", code: "BLUMTIPS" },
+  { title: "Crypto Regulations #2", code: "BLUMRULES" },
 ];
 /** Custom functions -------------------------------------------------------------- */
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
@@ -372,10 +377,10 @@ const init = async () => {
     dayClaim.click();
   }
 
-  // await openTab("earn");
-  // await delay(getRandomInt(1000, 3000));
+  await openTab("earn");
+  await delay(getRandomInt(1000, 3000));
 
-  // await resolveTasks(document);
+  await resolveTasks(document);
 
   await openTab("frens");
   await delay(getRandomInt(1000, 3000));
