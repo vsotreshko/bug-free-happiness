@@ -289,11 +289,11 @@ const init = async () => {
   await delay(5000); // Wait for window to load
 
   // 06:00 -> 09:00 or 21:00 -> 24:00
-  // if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(21) && isEarlierThan(24))) {
-  await launchBot(window, document, "dogshouse_bot", "7352918101", ["Dogs 🦴", "dogs"]);
-  // } else {
-  // await launchBot(window, document, "BlumCryptoBot", "6865543862", ["Blum", "blum"]);
-  // }
+  if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(21) && isEarlierThan(24))) {
+    await launchBot(window, document, "dogshouse_bot", "7352918101", ["Dogs 🦴", "dogs"]);
+  } else {
+    await launchBot(window, document, "BlumCryptoBot", "6865543862", ["Blum", "blum"]);
+  }
 };
 
 init();
