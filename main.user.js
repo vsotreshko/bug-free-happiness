@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.9
+// @version      7.0
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -35,6 +35,9 @@ const verifyWithCodes = [
   { title: "What is Uniswap?", code: "BLUMSHINE" },
   { title: "Crypto in Everyday Life", code: "BLUMANCE" },
   { title: "Memepad Tutorial", code: "MEMEPAD" },
+  { title: "Dex Evolution", code: "Blumspark" },
+  { title: "Is Binance a DEX?", code: "BLUMIES" },
+  { title: "Crypto Communities", code: "BLUMMUNITY" },
 
   { title: "Dec 20 News", code: "Trump" },
   { title: "Dec 18 News", code: "Mark" },
@@ -42,6 +45,7 @@ const verifyWithCodes = [
   { title: "Dec 16 News", code: "BITCOIN" },
   { title: "Dec 13 News", code: "BITCOINJESUS" },
   { title: "Dec 12 News", code: "RIPPLE" },
+  { title: "Dec 6 Crypto News", code: "Hundred" },
 ];
 /** Custom functions -------------------------------------------------------------- */
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
