@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.8
+// @version      6.9
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -21,11 +21,27 @@ const verifyWithCodes = [
   { title: "P2P Trading Safety Tips", code: "BLUMTIPS" },
   { title: "What’s Next for DeFi?", code: "BLUMNOW" },
   { title: "Crypto Slang. Part 3", code: "BOOBLUM" },
+  { title: "Crypto Slang. Part 4", code: "LAMBOBLUM" },
 
   { title: "Blum CMO @ Blockchain Life", code: "BLUMISLIFE" },
   { title: "Dex History #3", code: "LOVEBLUM" },
   { title: "P2P Trading Safety Tips", code: "BLUMTIPS" },
   { title: "Crypto Regulations #2", code: "BLUMRULES" },
+
+  { title: "Future of Telegram. Part 1", code: "TAPBLUM" },
+  { title: "Blum COO @ Blockchain Life", code: "LIFEISBLUM" },
+  { title: "History of Bitcoin", code: "BIGPIZZA" },
+  { title: "Crypto Slang. Part 5", code: "GONNABLUM" },
+  { title: "What is Uniswap?", code: "BLUMSHINE" },
+  { title: "Crypto in Everyday Life", code: "BLUMANCE" },
+  { title: "Memepad Tutorial", code: "MEMEPAD" },
+
+  { title: "Dec 20 News", code: "Trump" },
+  { title: "Dec 18 News", code: "Mark" },
+  { title: "Dec 17 News", code: "Kendrick" },
+  { title: "Dec 16 News", code: "BITCOIN" },
+  { title: "Dec 13 News", code: "BITCOINJESUS" },
+  { title: "Dec 12 News", code: "RIPPLE" },
 ];
 /** Custom functions -------------------------------------------------------------- */
 const delay = (ms) => new Promise((res) => setTimeout(res, ms));
