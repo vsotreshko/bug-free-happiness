@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.7
+// @version      6.8
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -23,7 +23,7 @@ const verifyWithCodes = [
   { title: "Crypto Slang. Part 3", code: "BOOBLUM" },
 
   { title: "Blum CMO @ Blockchain Life", code: "BLUMISLIFE" },
-  { title: "Dex History #3", code: "BLUMLOVE" },
+  { title: "Dex History #3", code: "LOVEBLUM" },
   { title: "P2P Trading Safety Tips", code: "BLUMTIPS" },
   { title: "Crypto Regulations #2", code: "BLUMRULES" },
 ];
