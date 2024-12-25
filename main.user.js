@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Blum Autoclicker fix
-// @version      6.5
+// @version      6.6
 // @namespace    Violentmonkey Scripts
 // @author       mudachyo
 // @match        https://telegram.blum.codes/*
@@ -395,7 +395,7 @@ const init = async () => {
     startFarming.click();
   }
 
-  playGame();
+  // playGame();
 };
 
 init();
