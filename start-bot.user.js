@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version    6.7
+// @version    6.8
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -286,7 +286,7 @@ const init = async () => {
     console.log(e.target.tagName); // to get the element tag name alone
   };
 
-  await addSymbolToTheName(document, "🦴");
+  // await addSymbolToTheName(document, "🦴");
   await addSymbolToTheName(document, "🐶");
 
   await delay(5000); // Wait for window to load
