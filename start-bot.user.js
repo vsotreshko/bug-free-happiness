@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version    6.6
+// @version    6.7
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -287,6 +287,7 @@ const init = async () => {
   };
 
   await addSymbolToTheName(document, "🦴");
+  await addSymbolToTheName(document, "🐶");
 
   await delay(5000); // Wait for window to load
 
