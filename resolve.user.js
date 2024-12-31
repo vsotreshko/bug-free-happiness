@@ -2,7 +2,7 @@
 // @name        Blum resolve fix
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version     6.0
+// @version     6.1
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match        *://*onetime.dog/*
@@ -197,6 +197,31 @@ const init = async () => {
   } else {
     console.error("Could not find element with 'calendar' in class name");
   }
+
+  await delay(1000);
+
+  const nameClaimClass =
+    "#root > div > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > div > div > div > div:nth-child(25)";
+  await simulateClickIfExist("25th Day", nameClaimClass);
+
+  await delay(1000);
+
+  const completeButton = Array.from(document.querySelectorAll("*")).find(
+    (element) => element.innerHTML === "Complete today's task"
+  );
+  await simulateClick(completeButton);
+
+  await delay(1000);
+
+  const claimButton = Array.from(document.querySelectorAll("*")).find((element) => element.innerHTML === "Claim");
+  console.log("claimButton", claimButton);
+  await simulateClick(claimButton);
+
+  await delay(1000);
+
+  const claimButton1 = Array.from(document.querySelectorAll("*")).find((element) => element.innerHTML === "Claim");
+  console.log("claimButton1", claimButton1);
+  await simulateClick(claimButton1);
 };
 
 init();
