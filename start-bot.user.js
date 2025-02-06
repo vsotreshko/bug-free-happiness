@@ -2,7 +2,7 @@
 // @name        Start bot
 // @namespace   Violentmonkey Scripts
 // @grant       none
-// @version    6.8
+// @version    6.9
 // @author      -
 // @description 9/1/2024, 7:13:21 PM
 // @match       *://web.telegram.org/*
@@ -293,9 +293,10 @@ const init = async () => {
 
   // 06:00 -> 09:00 or 21:00 -> 24:00
   // if ((isLaterThan(6) && isEarlierThan(9)) || (isLaterThan(21) && isEarlierThan(24))) {
-  await launchBot(window, document, "dogshouse_bot", "7352918101", ["Dogs 🦴", "dogs"]);
+  // await launchBot(window, document, "dogshouse_bot", "7352918101", ["Dogs 🦴", "dogs"]);
   // } else {
   // await launchBot(window, document, "BlumCryptoBot", "6865543862", ["Blum", "blum"]);
+  await launchBot(window, document, "PAWSOG_bot", "7200992513", "Paws");
   // }
 };
 
